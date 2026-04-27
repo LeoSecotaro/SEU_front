@@ -1,0 +1,136 @@
+:root{
+  --bg:#0b1720;
+  --panel:#fff;
+  --accent:#ffb300;
+  --text:#0f1720;
+  --muted:#6b7280;
+  --shadow:0 6px 18px rgba(2,6,23,0.12);
+  --header-height: 72px;
+}
+
+.site-header{
+  position: sticky;
+  top: 0;
+  -webkit-position: sticky;
+  left: 0;
+  right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+  background: rgba(255,255,255,0.92); /* slightly transparent */
+  backdrop-filter: saturate(120%) blur(4px);
+  border-bottom:1px solid rgba(230,233,239,0.6);
+  z-index: 50;
+  box-sizing: border-box;
+  transition: background-color 240ms ease, backdrop-filter 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+}
+
+.site-header.scrolled{
+  background: rgba(255,255,255,0.78);
+  backdrop-filter: saturate(120%) blur(6px);
+  border-bottom-color: rgba(230,233,239,0.35);
+  box-shadow: 0 6px 20px rgba(2,6,23,0.08);
+}
+
+.container{max-width:1200px;margin:0 auto;padding:0 20px}
+
+.nav-row{display:flex;align-items:center;gap:16px;justify-content:space-between;height:var(--header-height)}
+
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--text)}
+.brand-logo{background:var(--bg);color:#fff;padding:8px 12px;border-radius:8px;font-weight:700}
+.brand-sub{font-size:12px;color:var(--muted)}
+
+.nav-toggle{display:none;border:0;background:transparent;padding:8px}
+.hamburger{width:22px;height:2px;background:var(--text);display:inline-block;position:relative}
+.hamburger::after,.hamburger::before{content:'';position:absolute;left:0;height:2px;width:22px;background:var(--text)}
+.hamburger::before{top:-7px}
+.hamburger::after{top:7px}
+
+.main-nav{display:flex;align-items:center;gap:24px;margin:0 auto;justify-content:center}
+.main-nav ul{display:flex;gap:20px;list-style:none;margin:0;padding:0}
+.main-nav a{color:var(--text);text-decoration:none}
+.nav-actions{display:flex;align-items:center;gap:12px}
+
+.btn{padding:10px 16px;border-radius:8px;text-decoration:none;display:inline-block}
+.btn.primary{background:var(--accent);color:#0b1720;font-weight:700}
+.btn.ghost{border:0}
+
+/* make the header container a positioned parent so we can absolutely place brand/actions */
+.site-header .container{position:relative}
+
+/* Header layout: use grid for reliable centering and spacing */
+.site-header .container.nav-row{
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 16px;
+  height: var(--header-height);
+}
+
+/* brand on the left - keep in normal flow */
+.brand{
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* main nav centered in the middle column */
+.main-nav{
+  position: relative;
+  left: auto;
+  top: auto;
+  transform: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  z-index: 55;
+  max-width: 680px;
+  width: 100%;
+}
+
+/* actions on the right in the third column */
+.nav-actions{
+  position: relative;
+  right: auto;
+  top: auto;
+  transform: none;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-self: end;
+}
+
+/* Ensure toggle appears on the right in mobile, but keep it in flow */
+.nav-toggle{
+  display: none;
+  border: 0;
+  background: transparent;
+  padding: 8px;
+}
+
+@media (max-width: 900px){
+  /* switch to stacked layout on mobile */
+  .site-header .container.nav-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: var(--header-height);
+  }
+
+  .brand{order:1}
+  .nav-toggle{display:block;order:2}
+  .nav-actions{order:3}
+
+  .main-nav{position:absolute;inset:var(--header-height) 12px auto 12px;background:#fff;border-radius:12px;padding:16px;flex-direction:column;align-items:flex-start;box-shadow:var(--shadow);display:none}
+  .main-nav.open{display:flex}
+  .main-nav ul{flex-direction:column;width:100%}
+  .nav-actions{position:static;transform:none;width:100%;justify-content:center}
+  .site-header .container{position:static}
+  .main-nav{margin:0;}
+}

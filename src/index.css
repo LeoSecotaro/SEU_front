@@ -52,6 +52,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden; /* prevenir scroll horizontal causado por elementos full-bleed */
 }
 
 #root {

@@ -1,23 +1,20 @@
 import React from 'react'
 import './index.css'
 import './App.css'
-import Navbar from './components/Navbar'
-import HomeHero from './components/HomeHero'
+import NavBar from './components/NavBar/NavBar'
+import HomeHero from './components/HomeHero/HomeHero'
+import CoursesList from './components/CoursesList'
+import Footer from './components/Footer/Footer'
 
 function App() {
   return (
     <div className="app-root">
-      <Navbar />
+      <NavBar />
       <main>
         <HomeHero />
-        <section className="content container" id="cursos">
-          <h2>Próximamente</h2>
-          <p>Listado de cursos públicos consumidos desde la API.</p>
-        </section>
+        <CoursesList />
       </main>
-      <footer className="site-footer">
-        <div className="container">© {new Date().getFullYear()} UTN - Facultad Regional Mendoza</div>
-      </footer>
+      <Footer />
     </div>
   )
 }

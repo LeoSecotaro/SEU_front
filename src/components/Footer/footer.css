@@ -1,0 +1,28 @@
+.site-footer{background:#071226;color:#fff;padding:24px 0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);box-sizing:border-box}
+.footer-grid{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);display:grid;grid-template-columns:1fr 260px 260px;gap:20px;padding:0 64px;box-sizing:border-box}
+.footer-grid .col{padding:0;text-align:left}
+.brand-logo{background:#0b1720;color:#fff;padding:10px 14px;border-radius:10px;display:inline-block;margin-right:12px}
+.muted{color:rgba(255,255,255,0.7);font-size:14px}
+.footer-grid h4{margin:0 0 12px}
+.footer-grid ul{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px}
+.footer-brand-logo{width:48px;height:48px;display:inline-flex;align-items:center;justify-content:center;border-radius:12px;background:#2f383e;color:#fff;margin-right:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.03)}
+.footer-grid .logo{display:flex;align-items:center;gap:12px}
+.footer-grid .logo strong{display:block;font-size:18px}
+.footer-grid .logo .muted{margin-top:2px}
+.footer-grid .desc{max-width:520px;margin-top:16px;color:rgba(255,255,255,0.8);line-height:1.6}
+.socials{display:flex;gap:10px;margin-top:14px}
+.social-link{display:flex;flex-direction:column;align-items:center;text-decoration:none;color:rgba(255,255,255,0.9)}
+.social-icon{width:22px;height:22px;background:transparent;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.95);font-size:13px;border:1px solid rgba(255,255,255,0.03);padding:4px}
+.social-label{display:block;margin-top:6px;font-size:12px;color:rgba(255,255,255,0.78)}
+.footer-grid .col:nth-child(3) p{display:flex;align-items:center;gap:14px;color:rgba(255,255,255,0.85);margin:8px 0}
+.contact-line{display:flex;align-items:flex-start;gap:14px;color:rgba(255,255,255,0.85);margin:6px 0;line-height:1.4}
+.contact-line br{display:block}
+.contact-icon{color:#ffb300;font-size:15px;line-height:1;margin-top:3px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center}
+.contact-icon svg{width:16px;height:16px}
+.footer-brand-logo svg{width:20px;height:20px;color:#fff}
+.footer-bottom{border-top:2px solid rgba(255,255,255,0.14);padding:12px 0;margin-top:12px}
+.footer-bottom-inner{display:flex;justify-content:space-between;align-items:center;width:100vw;margin-left:calc(50% - 50vw);padding:0 64px;box-sizing:border-box}
+.footer-bottom .copyright{color:rgba(255,255,255,0.6);font-size:14px}
+.footer-bottom .legal-links a{color:rgba(255,255,255,0.75);text-decoration:none;margin-left:22px}
+.footer-bottom .legal-links a:hover{text-decoration:underline}
+@media (max-width:900px){.footer-grid{grid-template-columns:1fr;gap:18px;padding:0 24px}.footer-brand-logo{width:48px;height:48px}.footer-bottom-inner{flex-direction:column;gap:12px;width:100%;margin-left:0;padding:0 16px}}

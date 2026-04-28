@@ -1,6 +1,14 @@
 import './homehero.css'
+import { useCallback } from 'react'
 
 export default function HomeHero() {
+  const scrollToCourses = useCallback((e: React.MouseEvent) => {
+    // keep default anchor behavior for non-JS users but prevent double jump
+    e.preventDefault()
+    const el = document.getElementById('cursos')
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [])
+
   return (
     <section className="hero-landing" id="inicio">
       <div className="container hero-grid">
@@ -16,7 +24,7 @@ export default function HomeHero() {
             conocimientos y adquiere las herramientas que la industria demanda
             hoy.
           </p>
-          <a className="btn primary" href="#cursos">Explorar Cursos</a>
+          <a className="btn primary" href="#cursos" onClick={scrollToCourses}>Explorar Cursos</a>
         </div>
         <div className="hero-visual" aria-hidden>
           <div className="dot-grid" />

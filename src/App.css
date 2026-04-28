@@ -182,3 +182,33 @@
     border-right-color: var(--border);
   }
 }
+
+/* Footer: fondo oscuro y texto blanco para mejorar legibilidad */
+.site-footer{
+  background: #071226; /* azul oscuro del tema */
+  color: #fff;
+  padding: 28px 0;
+}
+.site-footer .container{
+  color: #fff;
+}
+
+/* enlaces en el footer si los hubiera */
+.site-footer a{color: rgba(255,255,255,0.92);text-decoration:none}
+.site-footer a:hover{opacity:0.9}
+
+/* Make everything inside <main> (after hero) have a white background so
+   the area from below the stats card until the footer appears white */
+main {
+  background: #ffffff;
+  /* ensure the main stretches and the white background covers full width */
+  min-height: 100%;
+}
+
+/* Add a small spacer at the top of the main content so the stats card that
+   overlaps the hero doesn't visually collide with the white area below */
+main > .content,
+main > .courses-grid,
+main > section {
+  padding-top: 24px;
+}

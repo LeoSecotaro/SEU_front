@@ -1,0 +1,13 @@
+.course-card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 18px 40px rgba(8,15,23,0.08);display:flex;flex-direction:column;min-height:420px;position:relative;transition:transform 220ms ease,box-shadow 220ms ease}
+.course-card:hover{transform:translateY(-8px);box-shadow:0 30px 60px rgba(8,15,23,0.12)}
+.course-card .hero{height:260px;background:linear-gradient(180deg,#eef3f6,#e9eff3);display:flex;align-items:center;justify-content:center;color:#b6c0c7;position:relative}
+.course-card .hero-icon{font-size:44px;opacity:0.25}
+.course-card .course-badge{position:absolute;top:16px;left:16px;background:#fff;border-radius:14px;padding:6px 12px;font-size:13px;color:#222;border:1px solid rgba(16,24,40,0.04);box-shadow:0 2px 6px rgba(8,15,23,0.04)}
+.course-card .body{padding:22px;flex:1;display:flex;flex-direction:column}
+.course-card h3{margin:0 0 12px;font-size:20px;color:#0b1720}
+.course-card .meta{color:#6b7785;font-size:14px;margin-bottom:18px;display:flex;gap:22px;align-items:center}
+.course-card .footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;margin-top:auto;border-top:1px solid rgba(16,24,40,0.04);padding-top:18px}
+.course-card .starts{color:#475569;font-size:13px}
+.btn.small{background:#071226;color:#fff;padding:10px 18px;border-radius:10px;text-decoration:none;font-size:14px;border:none;display:inline-flex;align-items:center;gap:10px;transition:background-color 180ms ease, color 180ms ease, transform 120ms ease}
+.course-card:hover .btn.small{background:#f6b000;color:#081022;transform:translateY(-2px)}
+.btn.small.alt{background:#f6b000;color:#081022}

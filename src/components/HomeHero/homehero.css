@@ -15,10 +15,14 @@
   min-height: calc(100vh - 72px);
   display: flex;
   align-items: center;
-  padding: 64px 0 120px; /* extra bottom space for the overlapping stats card */
+  /* reducir el padding superior para subir el contenido y acercarlo a la navbar */
+  padding: 2px 0 180px;
+
+  overflow: hidden; /* evitar que overlays provoquen scroll */
 }
 
-.container {
+/* Scoped container only for hero to avoid limiting global .container */
+.hero-landing .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
@@ -113,9 +117,12 @@
 .stats {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  bottom: -36px;
-  width: calc(100% - 160px);
+  /* centrar horizontalmente y elevar la tarjeta 32px para acercarla al contenido del hero */
+  transform: translate(-50%, -32px);
+  /* mantenerla dentro del hero, ajustar según breakpoints */
+  bottom: 12px;
+  /* usar max width y dejar margen lateral mínimo para evitar overflow */
+  width: calc(100% - 120px);
   max-width: 1040px;
   background: #fff;
   color: #071226;
@@ -123,26 +130,54 @@
   border-radius: 12px;
   display: flex;
   gap: 1px;
+  align-items: center; /* centrar verticalmente las columnas */
   box-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
   box-sizing: border-box;
 }
 
 .stat {
   flex: 1;
-  padding: 16px 20px;
+  padding: 20px 28px; /* menos padding vertical, más consistente con el ejemplo */
   text-align: center;
+  position: relative; /* necesario para el pseudo-elemento del divisor */
 }
 
 .stat strong {
   display: block;
-  font-size: 22px;
+  font-size: 28px; /* número más prominente como en el ejemplo */
+  font-weight: 800;
   color: #071226;
+  line-height: 1;
 }
 
 .stat span {
   display: block;
   color: #6b7280;
-  margin-top: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+/* divider between stats */
+.stat + .stat::before {
+  content: '';
+  position: absolute;
+  left: 0; /* sitúa el divisor en el borde izquierdo del stat actual */
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: rgba(7,18,34,0.09);
+}
+
+/* make divider slightly more visible on larger screens */
+@media (min-width: 1001px) {
+  .stat + .stat::before {
+    background: rgba(7,18,34,0.12);
+  }
+}
+
+/* hide dividers on stacked/mobile layout */
+@media (max-width: 720px) {
+  .stat + .stat::before { display: none; }
 }
 
 /* Responsive adjustments */
@@ -150,45 +185,12 @@
   .hero-grid {
     grid-template-columns: 1fr 360px;
     gap: 24px;
-  }
-  .hero-content h1 {
-    font-size: 52px;
-  }
-  .hero-visual {
-    height: 280px;
-  }
-  .stats {
-    width: calc(100% - 40px);
-  }
 }
 
 @media (max-width: 720px) {
   .hero-landing {
-    padding: 40px 0 24px;
-    min-height: auto;
-  }
-  .hero-grid {
-    grid-template-columns: 1fr;
-    gap: 20px;
-  }
-  .hero-content h1 {
-    font-size: 36px;
-    text-align: left;
-  }
-  .hero-visual {
-    height: 180px;
-  }
-  .stats {
-    position: static;
-    transform: none;
-    margin-top: 18px;
-    width: 100%;
-    flex-direction: column;
-    gap: 12px;
-    padding: 12px;
-  }
-  .stat {
-    text-align: center;
-    padding: 12px 8px;
-  }
+  padding: 24px 0 18px;
+  min-height: auto;
 }
+
+/* End */

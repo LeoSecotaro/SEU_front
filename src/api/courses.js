@@ -13,5 +13,11 @@ export function listCourses(params = {}) {
     }
   })
   const query = qs.toString()
+  // call the Rails backend API v1 endpoints under /api/v1
   return apiGet('/api/v1/courses' + (query ? `?${query}` : ''))
+}
+
+export function getCourse(id) {
+  if (!id) return Promise.reject(new Error('missing course id'))
+  return apiGet(`/api/v1/courses/${id}`)
 }

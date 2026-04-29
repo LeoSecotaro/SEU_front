@@ -1,0 +1,239 @@
+/* Basic layout for course details page */
+.course-hero {
+  position: relative;
+  width: 100vw;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  background: linear-gradient(180deg, #061126 0%, #071226 65%);
+  color: #fff;
+  padding: 80px 24px 88px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* default mobile */
+  text-align: center;
+}
+.course-hero .badge { background: rgba(255,179,0,0.12); color:#ffb300; display:inline-block; padding:8px 12px; border-radius:999px; margin-bottom:10px; font-weight:700 }
+.course-hero h1 {
+  font-size: clamp(32px, 6.5vw, 72px);
+  line-height: 1.02;
+  margin: 0 0 12px;
+}
+.course-hero .lead {
+  color: rgba(255,255,255,0.9);
+  margin: 8px 0 0; /* small gap under title, start at same left */
+  text-align: left;
+  max-width: none; /* width constrained by .hero-inner */
+}
+
+@media (max-width: 899px) {
+  .course-hero .lead {
+    text-align: center;
+    margin: 12px 0 0;
+  }
+}
+
+.course-hero .hero-inner {
+  width: min(1200px, calc(100% - 80px));
+  margin: 0 auto;
+  text-align: left;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* ensure children start at the same left edge */
+}
+.course-hero .hero-inner .badge { display:inline-block; margin-bottom:14px; margin-left: 0 }
+.course-hero .hero-inner h1 { margin-left: 0; padding-left: 0; text-indent: 0 }
+.course-hero .hero-inner .lead { margin-left: 0; padding-left: 0; text-indent: 0 }
+
+@media (max-width: 899px) {
+  .course-hero .hero-inner {
+    width: calc(100% - 40px);
+    margin: 0 20px;
+    text-align: center;
+    align-items: center; /* center on mobile */
+  }
+  .course-hero .hero-inner .badge { margin-left: 0 }
+  .course-hero .hero-inner h1, .course-hero .hero-inner .lead { text-align: center }
+}
+
+/* Make hero full-bleed and remove white gap under the navbar */
+
+.course-page {
+  padding-top: 24px;
+}
+
+.course-page.container {
+  /* reset to normal centered container for content */
+  position: relative;
+  width: 100%;
+  left: auto;
+  right: auto;
+  margin-left: 0;
+  margin-right: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* inner wrapper to constrain content width and center it */
+.course-inner {
+  /* center the content and keep a consistent responsive max width */
+  max-width: 1200px; 
+  width: 100%;
+  padding: 0 40px; /* gutter each side */
+  margin: 0 auto;
+  box-sizing: border-box;
+
+  /* rounded corners for the main inner container */
+  border-radius: 20px;
+  overflow: hidden; /* clip children (shadows/backgrounds) to the rounded corners */
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+}
+
+/* Consolidated course grid: single reliable definition (no lateral transforms) */
+.course-page .course-grid {
+  display: grid;
+  /* flexible main column + sidebar with responsive min/max width */
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
+  grid-template-areas: "content sidebar";
+  gap: 36px;
+  align-items: start;
+  width: 100%;
+  margin: -40px auto 0; /* overlap the hero slightly */
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* map areas to markup classes */
+.course-content { grid-area: content; }
+.course-sidebar { grid-area: sidebar; display:flex; flex-direction:column; gap:20px; }
+
+/* Sidebar: sticky price card, but do not nudge it with transforms */
+.course-sidebar .price-card {
+  position: sticky;
+  top: 96px;
+  align-self: stretch;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin-right: 0;
+  transform: none;
+}
+
+/* Ensure price amount behaves (no overflow causing horizontal scroll) */
+.price-card .price-amount {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-left: 8px;
+  padding-right: 8px;
+  box-sizing: border-box;
+}
+
+.course-meta-cards { margin-top: 18px; }
+.meta-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px }
+@media (max-width: 1100px) { .meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
+.meta-item { background:#fff; padding:18px; border-radius:12px; text-align:center; box-shadow:0 6px 18px rgba(8,15,23,0.06); border: 1px solid rgba(8,15,23,0.02) }
+.meta-item strong { display:block; margin-top:8px; font-size:16px; color:#071226 }
+
+.course-content { background:#fff; padding:32px; border-radius:20px; box-shadow:0 12px 36px rgba(8,15,23,0.06); margin-top: 18px; overflow: hidden; -webkit-background-clip: padding-box; background-clip: padding-box }
+.course-content { max-width: 100%; padding-left: 28px; padding-right: 28px; }
+.course-objectives h3, .course-topics h3 { margin-top:0; }
+
+/* Sidebar (price) visual match: dark header, yellow price, larger radii */
+.price-card { border-radius:14px; overflow:hidden; box-shadow:0 18px 40px rgba(8,15,23,0.08); border: 1px solid rgba(7,18,34,0.06) }
+.price-card .price-header {
+  background: #071226;
+  color: #fff;
+  padding: 22px 18px;
+  text-align: center;
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.price-card .price-amount {
+  background: #071226;
+  padding: 22px 18px;
+  text-align: center;
+  color: #ffb300;
+  font-weight: 900;
+  font-size: 32px;
+}
+.price-card .price-actions {
+  padding: 20px;
+  background: #fff;
+}
+.price-card .price-actions .btn.primary.large {
+  width: 100%;
+  padding: 14px;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+/* Remove 'modos de pago' block if present: keep sidebar minimal */
+.price-card .modes { display:none }
+
+.contact-card {
+  border-radius: 12px;
+  padding: 18px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(8,15,23,0.04);
+}
+.contact-card h4 { margin: 0 0 12px }
+.contact-item { color: #6b7280; font-size: 14px; margin-bottom: 10px }
+
+/* responsive */
+@media (max-width: 1200px) {
+  .course-page.container { padding: 0 16px }
+  .course-page .course-grid { max-width: 940px }
+  .course-hero .lead, .course-hero h1 { max-width: 940px }
+}
+@media (max-width: 900px) {
+  .course-hero { padding: 36px 18px 40px }
+  .course-inner { padding: 0 16px }
+  .course-page.container { width: auto; left: auto; margin-left: 0; margin-right: 0 }
+  .course-page .course-grid { grid-template-columns: 1fr; margin-top: 0; max-width: 100% }
+  .course-hero { align-items: flex-start; text-align: left; width: auto; margin-left: 0; margin-right: 0 }
+  .course-hero .lead { max-width: 100% }
+
+  .course-page .course-grid { padding-right: 16px }
+  .price-card { transform: none; margin-right: 0 }
+  .price-card .price-amount { white-space: normal }
+}
+@media (min-width: 1600px) {
+  .course-page .course-grid {
+    grid-template-columns: minmax(0, 1fr) 440px;
+  }
+  .course-inner { padding-right: 60px; }
+}
+
+/* Remove lateral translate nudges so layout doesn't shift right */
+@media (min-width: 1200px) {
+  .course-inner {
+    padding-right: 48px;
+    padding-left: 48px;
+    box-sizing: border-box;
+  }
+
+  /* Ensure children respect box-sizing and don't cause unexpected overflow */
+  .course-page .course-grid > * {
+    box-sizing: border-box;
+  }
+
+  /* ensure price card does not force horizontal scroll */
+  .price-card {
+    max-width: 100%;
+    overflow: visible;
+  }
+}
+
+/* slightly larger spacing adjustments for very wide viewports */
+@media (min-width: 1600px) {
+  .course-inner { padding-right: 60px; }
+}
+
+/* reduce the nudge on medium-large viewports so layout remains balanced */
+@media (max-width: 1400px) and (min-width: 1001px) {
+  .course-page .course-grid { transform: translateX(-20px); }
+}

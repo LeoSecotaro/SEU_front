@@ -133,6 +133,7 @@
   align-items: center; /* centrar verticalmente las columnas */
   box-shadow: 0 18px 40px rgba(2, 6, 23, 0.12);
   box-sizing: border-box;
+  z-index: 2;
 }
 
 .stat {
@@ -175,22 +176,113 @@
   }
 }
 
-/* hide dividers on stacked/mobile layout */
-@media (max-width: 720px) {
-  .stat + .stat::before { display: none; }
-}
-
 /* Responsive adjustments */
 @media (max-width: 1000px) {
   .hero-grid {
     grid-template-columns: 1fr 360px;
     gap: 24px;
+  }
+  /* ajustar ancho de la tarjeta de stats para pantallas medias */
+  .stats {
+    width: calc(100% - 80px);
+  }
 }
 
+/* Mobile: stats card centered square between hero and catalog (like example) */
 @media (max-width: 720px) {
-  .hero-landing {
-  padding: 24px 0 18px;
-  min-height: auto;
+  /* single column layout, hide right visual */
+  .hero-grid { grid-template-columns: 1fr; gap: 18px; }
+  .hero-visual { display: none; }
+
+  /* Reduce hero bottom padding but keep space for the centered stats card */
+  .hero-landing { padding: 20px 0 120px; min-height: auto; overflow: visible; }
+
+  /* Prevent horizontal overflow introduced by full-bleed container + calc widths */
+  .hero-landing { overflow-x: hidden; }
+
+  /* Centered stats card that appears between hero and catalog */
+  .stats {
+    position: relative; /* sits in normal flow between hero and following content */
+    transform: none;
+    left: auto;
+    bottom: auto;
+    width: calc(100% - 24px);
+    max-width: 720px;
+    margin: -24px auto 0; /* slight overlap over hero */
+    padding: 12px 14px 12px 18px; /* move inner content a bit to the right */
+    border-radius: 12px;
+    background: #fff;
+    color: #071226;
+    box-shadow: 0 12px 30px rgba(8,15,23,0.12);
+    display: flex;
+    flex-wrap: wrap; /* allow 2x2 layout */
+    align-items: stretch;
+    gap: 0;
+    box-sizing: border-box;
+    z-index: 5;
+    overflow: hidden; /* avoid inner borders creating visual overflow */
+  }
+
+  /* Disable old vertical pseudo divider on mobile (caused unwanted lines) */
+  .stat + .stat::before { display: none; }
+  /* Also remove any pseudo-elements on single stat that could draw lines */
+  .stat::before, .stat::after { display: none !important; }
+
+  /* Each stat becomes a quadrant: two columns x two rows */
+  .stat {
+    flex: 0 0 50%;
+    box-sizing: border-box;
+    padding: 14px 12px;
+    /* left-align content slightly to remove right gap */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start; /* align to left so text sits a bit right inside the card */
+    text-align: left;
+    position: relative;
+    /* remove borders to eliminate separators */
+    border: none !important;
+    background-clip: padding-box; /* avoid border showing outside rounded corners */
+  }
+
+  /* remove any explicit per-child borders */
+  .stat:nth-child(2n), .stat:nth-last-child(-n+2) { border: none !important; }
+
+  /* Remove corner radiuses on inner cells; keep them only on the parent .stats */
+  .stat { border-radius: 0; }
+  .stat:nth-child(1) { border-top-left-radius: 0; }
+  .stat:nth-child(2) { border-top-right-radius: 0; }
+  .stat:nth-child(3) { border-bottom-left-radius: 0; }
+  .stat:nth-child(4) { border-bottom-right-radius: 0; }
+
+  /* Typography tweaks: larger, tighter number and subtle label */
+  .stat strong {
+    font-size: 22px;
+    line-height: 1;
+    font-weight: 800;
+    color: #071226;
+    margin-bottom: 6px;
+  }
+
+  .stat span {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 0;
+    line-height: 1.25;
+    display: block;
+  }
+
+  /* Slightly reduce title size to avoid large vertical gaps */
+  .hero-content h1 { font-size: 40px; line-height: 1; }
+}
+
+/* Extra small screens - tighten sizes and keep text shifted right a bit */
+@media (max-width: 420px) {
+  .hero-landing { padding: 16px 0 110px; }
+  .stats { width: calc(100% - 20px); margin-top: -18px; padding: 10px 12px 10px 14px; }
+  .stat { padding: 10px 8px; align-items: flex-start; text-align: left; }
+  .stat strong { font-size: 18px; }
+  .hero-content h1 { font-size: 32px; }
 }
 
 /* End */

@@ -1,239 +1,516 @@
-/* Basic layout for course details page */
+/* =========================================
+   1. HERO SECTION (Fondo oscuro y alineación)
+   ========================================= */
 .course-hero {
-  position: relative;
-  width: 100vw;
-  left: 50%;
-  right: 50%;
-  margin-left: -50vw;
-  margin-right: -50vw;
-  background: linear-gradient(180deg, #061126 0%, #071226 65%);
-  color: #fff;
-  padding: 80px 24px 88px;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* default mobile */
-  text-align: center;
-}
-.course-hero .badge { background: rgba(255,179,0,0.12); color:#ffb300; display:inline-block; padding:8px 12px; border-radius:999px; margin-bottom:10px; font-weight:700 }
-.course-hero h1 {
-  font-size: clamp(32px, 6.5vw, 72px);
-  line-height: 1.02;
-  margin: 0 0 12px;
-}
-.course-hero .lead {
-  color: rgba(255,255,255,0.9);
-  margin: 8px 0 0; /* small gap under title, start at same left */
-  text-align: left;
-  max-width: none; /* width constrained by .hero-inner */
-}
-
-@media (max-width: 899px) {
-  .course-hero .lead {
-    text-align: center;
-    margin: 12px 0 0;
-  }
+  position: relative !important;
+  width: 100vw !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  background: #0b1426 !important;
+  padding: 80px 24px 120px !important;
+  text-align: left !important;
+  box-sizing: border-box !important;
 }
 
 .course-hero .hero-inner {
-  width: min(1200px, calc(100% - 80px));
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
-  text-align: left;
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* ensure children start at the same left edge */
-}
-.course-hero .hero-inner .badge { display:inline-block; margin-bottom:14px; margin-left: 0 }
-.course-hero .hero-inner h1 { margin-left: 0; padding-left: 0; text-indent: 0 }
-.course-hero .hero-inner .lead { margin-left: 0; padding-left: 0; text-indent: 0 }
-
-@media (max-width: 899px) {
-  .course-hero .hero-inner {
-    width: calc(100% - 40px);
-    margin: 0 20px;
-    text-align: center;
-    align-items: center; /* center on mobile */
-  }
-  .course-hero .hero-inner .badge { margin-left: 0 }
-  .course-hero .hero-inner h1, .course-hero .hero-inner .lead { text-align: center }
+  align-items: flex-start !important;
+  text-align: left !important;
 }
 
-/* Make hero full-bleed and remove white gap under the navbar */
-
-.course-page {
-  padding-top: 24px;
+.course-hero h1, .course-hero .lead {
+  text-align: left !important;
+  margin-left: 0 !important;
 }
 
+.course-hero .badge { 
+  background: #ffb300; 
+  color: #000; 
+  display: inline-block; 
+  padding: 6px 14px; 
+  border-radius: 999px; 
+  margin-bottom: 16px; 
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* =========================================
+   2. GRID LAYOUT (El fix principal)
+   ========================================= */
+/* Hacemos que la página por debajo del hero sea blanca y ocupe el 100% */
 .course-page.container {
-  /* reset to normal centered container for content */
-  position: relative;
-  width: 100%;
-  left: auto;
-  right: auto;
-  margin-left: 0;
-  margin-right: 0;
-  padding: 0;
-  box-sizing: border-box;
+  position: relative !important;
+  width: 100vw !important;
+  left: 50% !important;
+  right: 50% !important;
+  margin-left: -50vw !important;
+  margin-right: -50vw !important;
+  background: #ffffff !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
 }
 
-/* inner wrapper to constrain content width and center it */
-.course-inner {
-  /* center the content and keep a consistent responsive max width */
-  max-width: 1200px; 
-  width: 100%;
-  padding: 0 40px; /* gutter each side */
-  margin: 0 auto;
-  box-sizing: border-box;
-
-  /* rounded corners for the main inner container */
-  border-radius: 20px;
-  overflow: hidden; /* clip children (shadows/backgrounds) to the rounded corners */
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-}
-
-/* Consolidated course grid: single reliable definition (no lateral transforms) */
 .course-page .course-grid {
-  display: grid;
-  /* flexible main column + sidebar with responsive min/max width */
-  grid-template-columns: minmax(0, 1fr) minmax(320px, 420px);
-  grid-template-areas: "content sidebar";
-  gap: 36px;
-  align-items: start;
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) 380px !important;
+  grid-template-areas: "content sidebar" !important; /* Esto asigna cada bloque a su lado */
+  gap: 32px !important;
+  align-items: start !important;
   width: 100%;
-  margin: -40px auto 0; /* overlap the hero slightly */
-  padding: 0;
+  max-width: 1200px;
+  margin: -60px auto 0 !important; /* Efecto superpuesto sobre el Hero */
+  position: relative;
+  z-index: 10;
+  padding: 0 20px;
   box-sizing: border-box;
 }
 
-/* map areas to markup classes */
-.course-content { grid-area: content; }
-.course-sidebar { grid-area: sidebar; display:flex; flex-direction:column; gap:20px; }
-
-/* Sidebar: sticky price card, but do not nudge it with transforms */
-.course-sidebar .price-card {
-  position: sticky;
-  top: 96px;
-  align-self: stretch;
-  max-width: 100%;
-  box-sizing: border-box;
-  margin-right: 0;
-  transform: none;
+/* =========================================
+   3. COLUMNAS PRINCIPALES
+   ========================================= */
+.course-content {
+  grid-area: content;
+  background: #ffffff !important; /* white card background */
+  box-shadow: 0 12px 36px rgba(8,15,23,0.06) !important;
+  padding: 28px !important;
+  border-radius: 20px !important;
+  box-sizing: border-box !important;
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Separación entre meta-cards y el contenido */
+  text-align: left !important;
 }
 
-/* Ensure price amount behaves (no overflow causing horizontal scroll) */
-.price-card .price-amount {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-left: 8px;
-  padding-right: 8px;
-  box-sizing: border-box;
+.course-sidebar {
+  grid-area: sidebar;
+  width: 100%;
 }
 
-.course-meta-cards { margin-top: 18px; }
-.meta-grid { display:grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px }
-@media (max-width: 1100px) { .meta-grid { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
-.meta-item { background:#fff; padding:18px; border-radius:12px; text-align:center; box-shadow:0 6px 18px rgba(8,15,23,0.06); border: 1px solid rgba(8,15,23,0.02) }
-.meta-item strong { display:block; margin-top:8px; font-size:16px; color:#071226 }
+/* =========================================
+   4. META CARDS (La barra blanca superior)
+   ========================================= */
+.course-meta-cards {
+  background: #fff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.06) !important;
+  padding: 0 !important;
+  width: 100%;
+  margin: 0 !important;
+  border: 1px solid rgba(8,15,23,0.03) !important;
+}
 
-.course-content { background:#fff; padding:32px; border-radius:20px; box-shadow:0 12px 36px rgba(8,15,23,0.06); margin-top: 18px; overflow: hidden; -webkit-background-clip: padding-box; background-clip: padding-box }
-.course-content { max-width: 100%; padding-left: 28px; padding-right: 28px; }
-.course-objectives h3, .course-topics h3 { margin-top:0; }
+/* Center the meta-cards row inside the white main card */
+.course-meta-cards {
+  /* constrain the horizontal width and center within .course-content */
+  max-width: 1100px !important;
+  margin: -12px auto 0 !important; /* keep the lifted overlap effect but centered */
+  padding: 0 18px !important;
+  box-sizing: border-box !important;
+}
 
-/* Sidebar (price) visual match: dark header, yellow price, larger radii */
-.price-card { border-radius:14px; overflow:hidden; box-shadow:0 18px 40px rgba(8,15,23,0.08); border: 1px solid rgba(7,18,34,0.06) }
-.price-card .price-header {
-  background: #071226;
-  color: #fff;
-  padding: 22px 18px;
+.course-meta-cards .meta-grid {
+  display: flex !important;
+  gap: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  align-items: stretch !important;
+}
+
+.course-meta-cards .meta-card {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border-right: 1px solid rgba(8,15,23,0.06) !important;
+  padding: 20px 16px !important;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  gap: 8px;
+}
+
+.course-meta-cards .meta-card:last-child {
+  border-right: none !important;
+}
+
+/* Iconos y textos de los meta cards */
+.course-meta-cards .meta-card-icon {
+  font-size: 24px;
+  color: #0b1426;
+  margin-bottom: 4px;
+}
+
+.course-meta-cards .meta-card-label {
   font-size: 13px;
-  letter-spacing: 1px;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.price-card .price-amount {
-  background: #071226;
-  padding: 22px 18px;
-  text-align: center;
-  color: #ffb300;
-  font-weight: 900;
-  font-size: 32px;
+
+.course-meta-cards .meta-card-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0b1426;
 }
-.price-card .price-actions {
-  padding: 20px;
-  background: #fff;
+
+/* =========================================
+   5. TEMAS A DESARROLLAR (Accordion)
+   ========================================= */
+.topics-list { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 0; 
+  margin-top: 16px; 
 }
-.price-card .price-actions .btn.primary.large {
-  width: 100%;
-  padding: 14px;
-  border-radius: 10px;
+
+.topic-item { 
+  border-bottom: 1px solid #f1f5f9; 
+}
+
+.topic-item:last-child { 
+  border-bottom: none; 
+}
+
+.topic-toggle { 
+  display: flex !important; 
+  align-items: center !important; 
+  width: 100% !important; 
+  background: none !important; 
+  border: none !important; 
+  padding: 16px 0 !important; 
+  cursor: pointer !important; 
+  text-align: left !important;
+}
+
+.topic-index { 
+  display: flex !important; 
+  align-items: center !important; 
+  justify-content: center !important; 
+  width: 28px !important; 
+  height: 28px !important; 
+  border-radius: 50% !important; 
+  background: #f1f5f9 !important; 
+  color: #0b1426 !important; 
+  font-weight: 700 !important; 
+  font-size: 13px !important; 
+  margin-right: 16px !important;
+  flex-shrink: 0;
+}
+
+.topic-title { 
+  flex: 1; 
+  font-size: 15px !important; 
+  font-weight: 600 !important; 
+  color: #0b1426 !important; 
+}
+
+.topic-icon { 
+  color: #94a3b8 !important; 
+  transition: transform 0.3s ease !important; 
+  font-size: 13px !important;
+}
+
+.topic-item.open .topic-icon { 
+  transform: rotate(90deg) !important; 
+}
+
+.topic-body { 
+  max-height: 0; 
+  overflow: hidden; 
+  transition: all 0.3s ease; 
+  opacity: 0;
+}
+
+.topic-item.open .topic-body { 
+  max-height: 800px; 
+  opacity: 1;
+  padding-bottom: 16px;
+}
+
+.topic-body-inner { 
+  padding: 0 0 0 44px; /* Alinear texto con el título visualmente */
+  color: #64748b; 
+  font-size: 14px; 
+  line-height: 1.6; 
+}
+.topic-body-inner p {
+  margin: 0;
+}
+
+/* =========================================
+   6. INFO CARDS (Días/Horarios y Cupo)
+   ========================================= */
+.course-info-section { /* Si hay div contenedor de la grilla de cards */
+  display: grid; 
+  grid-template-columns: 1fr 1fr; 
+  gap: 24px; 
+  margin-top: 24px; 
+}
+
+/* Contenedores de cada tarjetita de información */
+.info-card {
+  border: 1px solid #e2e8f0; 
+  border-radius: 12px; 
+  padding: 16px; 
+  background: #fafafa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Si existe el título dentro de la card general (Días y Horarios) */
+.info-card-title { 
+  font-weight: 600; 
+  color: #0b1426; 
+  margin-bottom: 16px; 
   font-size: 16px;
 }
 
-/* Remove 'modos de pago' block if present: keep sidebar minimal */
-.price-card .modes { display:none }
-
-.contact-card {
-  border-radius: 12px;
-  padding: 18px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(8,15,23,0.04);
+/* Filas con icono y texto (fechas/dirección/cupos) */
+.info-card-line { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-bottom: 12px; 
 }
-.contact-card h4 { margin: 0 0 12px }
-.contact-item { color: #6b7280; font-size: 14px; margin-bottom: 10px }
-
-/* responsive */
-@media (max-width: 1200px) {
-  .course-page.container { padding: 0 16px }
-  .course-page .course-grid { max-width: 940px }
-  .course-hero .lead, .course-hero h1 { max-width: 940px }
+.info-card-line:last-child { 
+  margin-bottom: 0; 
 }
+
+.line-icon { 
+  color: #64748b; 
+  display: flex; 
+  align-items: center; 
+  font-size: 16px;
+}
+
+.line-text { 
+  color: #0f172a; 
+  font-size: 14px; 
+}
+
+.line-text strong {
+  font-weight: 600;
+}
+
+.muted { 
+  color: #64748b; 
+  font-weight: normal; 
+}
+
+/* Barra de progreso de cupos */
+.quota-progress-line { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  margin-top: 12px; 
+}
+
+.quota-progress { 
+  flex: 1; 
+  height: 8px; 
+  background: #e2e8f0; 
+  border-radius: 4px; 
+  overflow: hidden; 
+  position: relative;
+}
+
+.quota-bar { 
+  height: 100%; 
+  background: #f59e0b; /* Color naranja UTN/Ejemplo */
+  border-radius: 4px; 
+}
+
+.quota-label { 
+  font-size: 12px; 
+  color: #64748b; 
+  white-space: nowrap;
+}
+
 @media (max-width: 900px) {
-  .course-hero { padding: 36px 18px 40px }
-  .course-inner { padding: 0 16px }
-  .course-page.container { width: auto; left: auto; margin-left: 0; margin-right: 0 }
-  .course-page .course-grid { grid-template-columns: 1fr; margin-top: 0; max-width: 100% }
-  .course-hero { align-items: flex-start; text-align: left; width: auto; margin-left: 0; margin-right: 0 }
-  .course-hero .lead { max-width: 100% }
-
-  .course-page .course-grid { padding-right: 16px }
-  .price-card { transform: none; margin-right: 0 }
-  .price-card .price-amount { white-space: normal }
+  .course-page .course-grid { 
+    grid-template-columns: 1fr !important; 
+    grid-template-areas: "content" "sidebar" !important;
+    margin-top: -40px !important; 
+  }
+  
+  .course-meta-cards .meta-grid { 
+    flex-direction: column !important; 
+  }
+  
+  .course-meta-cards .meta-card { 
+    border-right: none !important; 
+    border-bottom: 1px solid #f1f5f9 !important; 
+    padding: 16px !important; 
+  }
+  
+  .course-meta-cards .meta-card:last-child { 
+    border-bottom: none !important; 
+  }
+  
+  .price-card { position: static !important; }
 }
-@media (min-width: 1600px) {
-  .course-page .course-grid {
-    grid-template-columns: minmax(0, 1fr) 440px;
-  }
-  .course-inner { padding-right: 60px; }
-}
 
-/* Remove lateral translate nudges so layout doesn't shift right */
-@media (min-width: 1200px) {
-  .course-inner {
-    padding-right: 48px;
-    padding-left: 48px;
-    box-sizing: border-box;
-  }
-
-  /* Ensure children respect box-sizing and don't cause unexpected overflow */
-  .course-page .course-grid > * {
-    box-sizing: border-box;
-  }
-
-  /* ensure price card does not force horizontal scroll */
-  .price-card {
-    max-width: 100%;
-    overflow: visible;
+@media (max-width: 768px) {
+  .course-info-section {
+    grid-template-columns: 1fr;
   }
 }
 
-/* slightly larger spacing adjustments for very wide viewports */
-@media (min-width: 1600px) {
-  .course-inner { padding-right: 60px; }
+/* =========================================
+   7. SIDEBAR - Ajustes para el price-card (quitar descuentos y simplificar listado)
+   ========================================= */
+/* Hide common discount column classes if present and force single-column payment list */
+.price-card .modes, .price-card .payment-modes, .price-card .modes-list { display: block !important; }
+.price-card .modes .discount, .price-card .modes .right, .price-card .mode-discount, .price-card .amount { display: none !important; }
+
+/* Ensure payment rows stack and show only the label text */
+.price-card .modes .mode, .price-card .modes-item {
+  display: block !important;
+  padding: 6px 0 !important;
+  color: #374151 !important;
+  font-size: 14px !important;
 }
 
-/* reduce the nudge on medium-large viewports so layout remains balanced */
-@media (max-width: 1400px) and (min-width: 1001px) {
-  .course-page .course-grid { transform: translateX(-20px); }
+/* Keep CTA visible and styled */
+.price-card .price-actions { padding: 20px !important; background: #fff !important; }
+.price-card .price-actions .btn { width: 100% !important; }
+
+/* Safety: if the markup used two columns, hide the second column children */
+.price-card > .modes > * > *:nth-child(2) { display: none !important; }
+
+/* =========================================
+   8. INFO CARDS (Días y Horarios / Información de Cupo) - visual como ejemplo
+   ========================================= */
+.course-info-section { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 24px !important; margin-top: 24px !important; }
+.info-card {
+  background: #fff !important;
+  border: 1px solid rgba(8,15,23,0.04) !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: 0 8px 24px rgba(8,15,23,0.04) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+}
+.info-card-title { margin-bottom: 12px !important; font-weight: 700 !important; color: #0b1426 !important; }
+.info-card-line { display: flex !important; align-items: center !important; gap: 12px !important; padding: 10px 12px !important; background: #fff !important; border-radius: 10px !important; border: 1px solid rgba(8,15,23,0.03) !important; margin-bottom: 12px !important; }
+.info-card-line:last-child { margin-bottom: 0 !important; }
+.line-icon { flex: 0 0 36px !important; width: 36px !important; height: 36px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border-radius: 8px !important; font-size: 16px !important; background: linear-gradient(180deg,#fff8eb,#eef2ff) !important; color: #b45309 !important; }
+.line-text { color: #0f172a !important; font-size: 14px !important; }
+.quota-progress { height: 10px !important; border-radius: 6px !important; }
+
+/* SIDEBAR: estilo específico para cabecera y monto */
+.price-card .price-header {
+  color: #ffffff !important; /* texto INVERSIÓN en blanco */
+  text-align: center !important;
+  font-size: 13px !important;
+  letter-spacing: 1px !important;
+  padding: 20px 18px !important;
+  background: #071226 !important; /* asegura contraste si alguien lo cambió */
+}
+
+.price-card .price-amount {
+  color: #f59e0b !important; /* naranja destacado */
+  font-weight: 900 !important; /* negrita pesada */
+  font-size: 38px !important; /* grande en desktop */
+  text-align: center !important;
+  padding: 22px 18px !important;
+  line-height: 1 !important;
+}
+
+/* ajusta para móviles para no romper el diseño */
+@media (max-width: 900px) {
+  .price-card .price-amount {
+    font-size: 26px !important;
+    padding: 16px 12px !important;
+  }
+  .price-card .price-header { font-size: 12px !important; padding: 14px 12px !important; }
+}
+
+/* Add white outline around price card (visible when overlapping the dark hero) */
+.price-card {
+  position: relative !important;
+  background: #fff !important;
+  border-radius: 14px !important;
+  /* white-ish stroke so it shows against the dark hero background */
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  box-shadow: 0 18px 40px rgba(8,15,23,0.08) !important;
+  overflow: visible !important;
+}
+
+/* Ensure the dark header keeps rounded top corners so the white border is visible around it */
+.price-card .price-header {
+  border-top-left-radius: 14px !important;
+  border-top-right-radius: 14px !important;
+}
+
+/* Slight inner contrast line under the header to match example */
+.price-card .price-header::after {
+  content: '';
+  display: block;
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin-top: 0;
+}
+
+/* Make main content appear as a rounded white card like the example */
+.course-content {
+  grid-area: content;
+  background: #ffffff !important; /* white card background */
+  box-shadow: 0 12px 36px rgba(8,15,23,0.06) !important;
+  padding: 28px !important;
+  border-radius: 20px !important;
+  box-sizing: border-box !important;
+  display: flex;
+  flex-direction: column;
+  gap: 24px; /* Separación entre meta-cards y el contenido */
+  text-align: left !important;
+}
+
+/* Ensure meta-cards stay visually attached and don't inherit the big card's border radius */
+.course-meta-cards {
+  margin-top: -12px !important; /* subtly lift meta cards so they look attached */
+  padding: 12px !important;
+}
+
+/* inner small info cards (Días y Horarios, Cupo) should look like in example */
+.course-info-section { /* grid that sits inside the white card */
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 20px !important;
+  margin-top: 12px !important;
+}
+
+.info-card { /* make each info card a light box inside the main card */
+  background: #ffffff !important;
+  border: 1px solid rgba(8,15,23,0.04) !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: none !important; /* keep it subtle since parent card already has shadow */
+}
+
+.info-card-line { /* small inner rows inside each info card */
+  background: #f8fafc !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  border: 1px solid rgba(8,15,23,0.03) !important;
+  margin-bottom: 12px !important;
+}
+
+.info-card-line:last-child { margin-bottom: 0 !important; }
+
+@media (max-width: 900px) {
+  .course-content { padding: 18px !important; border-radius: 14px !important }
+  .course-info-section { grid-template-columns: 1fr !important }
 }

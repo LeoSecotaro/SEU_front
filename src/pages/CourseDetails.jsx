@@ -14,7 +14,7 @@ export default function CourseDetails() {
 
   useEffect(() => {
     if (!id) return
-    getCourse(id).then(setCourse).catch(setError)
+    getCourse(id).then((c) => { console.log('getCourse response:', c); setCourse(c) }).catch((e) => { console.error('getCourse error', e); setError(e) })
   }, [id])
 
   if (error) return <div className="container">Error cargando curso: {String(error)}</div>

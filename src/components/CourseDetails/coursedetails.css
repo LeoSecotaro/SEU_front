@@ -510,7 +510,240 @@
 
 .info-card-line:last-child { margin-bottom: 0 !important; }
 
+/* Make the price card visually larger and centered inside the sidebar */
+.course-sidebar .price-card {
+  max-width: 480px !important; /* allow the card to be bigger than the default column */
+  width: 100% !important;
+  margin: 0 auto 18px auto !important; /* center in the sidebar column */
+  padding-bottom: 0 !important; /* header and amount handle spacing */
+}
+
+.price-card .price-amount {
+  font-size: 44px !important; /* bigger amount */
+  padding: 26px 22px !important;
+}
+
+.price-card .price-actions {
+  padding: 22px !important;
+}
+
+/* stronger visible white border when larger */
+.price-card {
+  border: 1px solid rgba(255,255,255,0.22) !important;
+}
+
+/* Avoid shadows visually stacking between price-card and contact-card */
+.course-sidebar .price-card {
+  /* keep the visual lift but create breathing room below */
+  margin-bottom: 28px !important;
+  position: relative !important;
+  z-index: 30 !important; /* sit above the contact card */
+  /* reduce vertical spread so shadow doesn't reach far down */
+  box-shadow: 0 12px 24px rgba(8,15,23,0.10) !important;
+}
+
+.course-sidebar .contact-card {
+  position: relative !important;
+  z-index: 10 !important;
+  margin-top: 0 !important;
+  /* soften the contact-card shadow so overlap is less visible */
+  box-shadow: 0 6px 18px rgba(8,15,23,0.04) !important;
+}
+
+/* If hero overlap causes the price-card to float, ensure the contact card clears it */
+.course-sidebar { display: flex; flex-direction: column; align-items: center; }
+.course-sidebar > * { width: 100%; }
+
 @media (max-width: 900px) {
-  .course-content { padding: 18px !important; border-radius: 14px !important }
-  .course-info-section { grid-template-columns: 1fr !important }
+  .course-sidebar .price-card { margin-bottom: 20px !important; }
+}
+
+/* CONTACT CARD (scoped to course sidebar) - ensure these rules do NOT affect global footer icons */
+.course-sidebar .contact-card {
+  background: #fff !important;
+  border: 1px solid rgba(8,15,23,0.04) !important;
+  border-radius: 12px !important;
+  padding: 18px !important;
+  box-shadow: 0 8px 24px rgba(8,15,23,0.04) !important;
+}
+
+.course-sidebar .contact-list {
+  list-style: none !important;
+  padding: 0 !important;
+  margin: 8px 0 0 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+}
+
+.course-sidebar .contact-item {
+  display: flex !important;
+  gap: 12px !important;
+  align-items: center !important;
+}
+
+/* mini card behind the text to separate from parent white background */
+.course-sidebar .contact-item .contact-body {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Center contact rows and add light-gray pill behind them (like Días y Horarios) */
+.course-sidebar .contact-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; /* center children horizontally */
+  text-align: center !important;
+}
+
+.course-sidebar .contact-list {
+  width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px !important;
+  align-items: center !important; /* center each row */
+  padding: 0 !important;
+  margin: 8px 0 0 0 !important;
+}
+
+.course-sidebar .contact-item {
+  width: 100% !important;
+  max-width: 420px !important; /* constrain row width */
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  justify-content: flex-start !important; /* keep icon left within the row */
+}
+
+/* gray pill behind the label+value similar to info-card-line */
+.course-sidebar .contact-item .contact-body {
+  background: #f8fafc !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  border: 1px solid rgba(8,15,23,0.03) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* center label/value inside the pill on small widths */
+.course-sidebar .contact-item .contact-body .contact-label,
+.course-sidebar .contact-item .contact-body .contact-value {
+  text-align: left !important;
+}
+
+.course-sidebar .contact-icon {
+  flex: 0 0 36px !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border-radius: 8px !important;
+  background: linear-gradient(180deg,#fff8eb,#fff2e6) !important;
+  color: #b45309 !important;
+  font-size: 16px !important;
+}
+
+.course-sidebar .contact-value { color: #0b1426 !important; font-weight: 600 !important; text-decoration: none !important; }
+
+@media (max-width: 900px) {
+  .course-sidebar .contact-item { max-width: 100% !important; justify-content: flex-start !important; }
+  .course-sidebar .contact-card { align-items: stretch !important; text-align: left !important; }
+  .course-sidebar .contact-item .contact-body { align-items: flex-start !important; }
+}
+
+/* Style the main CTA to match the example: large orange pill with thin dark border and lift */
+.price-card .price-actions .btn.primary.large {
+  display: block !important;
+  width: 100% !important;
+  background: #ffb300 !important; /* bright orange */
+  color: #071226 !important; /* dark text */
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  padding: 14px 18px !important;
+  border-radius: 10px !important;
+  border: 2px solid rgba(7,18,34,0.12) !important; /* thin dark outline */
+  box-shadow: 0 12px 28px rgba(8,15,23,0.12) !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: transform 140ms ease, box-shadow 140ms ease !important;
+}
+
+.price-card .price-actions .btn.primary.large:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 22px 40px rgba(8,15,23,0.16) !important;
+}
+
+/* CTA button shadow behavior in price card: larger shadow normally, smaller on hover */
+.price-card .price-actions .btn.primary.large {
+  box-shadow: 0 18px 40px rgba(2,6,23,0.14);
+  transition: box-shadow 160ms ease, background 120ms ease;
+}
+
+.price-card .price-actions .btn.primary.large:hover,
+.price-card .price-actions .btn.primary.large:focus {
+  box-shadow: 0 6px 14px rgba(2,6,23,0.08);
+}
+
+/* Reduce CTA shadow intensity for the price-card button (override previous larger shadows) */
+.price-card .price-actions .btn.primary.large {
+  box-shadow: 0 6px 14px rgba(2,6,23,0.06) !important; /* smaller, lighter shadow */
+  transition: transform 140ms ease, box-shadow 140ms ease !important;
+}
+
+.price-card .price-actions .btn.primary.large:hover,
+.price-card .price-actions .btn.primary.large:focus {
+  box-shadow: 0 8px 18px rgba(2,6,23,0.08) !important; /* ligeramente más grande al pasar el ratón pero aún sutil */
+  transform: translateY(-2px) !important;
+}
+
+@media (max-width: 900px) {
+  .price-card .price-actions .btn.primary.large { font-size: 15px !important; padding: 12px 14px !important; }
+}
+
+/* Tweak shadows and spacing so contact card does not visually sit "behind" the price card */
+.course-sidebar .price-card {
+  margin-bottom: 48px !important; /* more breathing room */
+  position: relative !important;
+  z-index: 40 !important; /* keep above hero */
+  box-shadow: 0 10px 22px rgba(8,15,23,0.08) !important; /* slightly tighter shadow */
+  transform: translateZ(0); /* create stacking context */
+}
+
+.course-sidebar .contact-card {
+  position: relative !important;
+  z-index: 30 !important; /* sit below price-card but not too far */
+  margin-top: 0 !important;
+  box-shadow: 0 12px 36px rgba(8,15,23,0.06) !important; /* stronger to match visual depth */
+  background-clip: padding-box !important; /* keep border visible */
+}
+
+/* If there is still perceivable overlap on very narrow widths, push contact-card down more */
+@media (max-width: 480px) {
+  .course-sidebar .price-card { margin-bottom: 28px !important; }
+  .course-sidebar .contact-card { margin-top: 8px !important; }
+}
+
+/* Reduce vertical padding of contact card to remove excess empty space above the title */
+.course-sidebar .contact-card {
+  padding: 12px 16px !important; /* smaller top/bottom padding */
+}
+
+.course-sidebar .contact-card h4 {
+  margin: 8px 0 10px !important; /* tighten space around the title */
+  font-size: 16px !important;
+}
+
+.course-sidebar .contact-list {
+  margin-top: 6px !important; /* less gap between title and first row */
+}
+
+.course-sidebar .contact-item .contact-body {
+  padding: 10px 12px !important; /* slightly smaller inner pill */
 }

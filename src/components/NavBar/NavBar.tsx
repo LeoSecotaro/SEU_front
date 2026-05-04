@@ -1,9 +1,12 @@
 import './navbar.css'
 import { useEffect, useRef } from 'react'
-import { FaGraduationCap } from 'react-icons/fa'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { FaGraduationCap, FaArrowLeft, FaHome } from 'react-icons/fa'
 
 export default function NavBar() {
   const headerRef = useRef<HTMLElement | null>(null)
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const onScroll = () => {
@@ -18,9 +21,34 @@ export default function NavBar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  const isHome = location.pathname === '/' || location.pathname === ''
+
   return (
     <header ref={headerRef} className="site-header">
       <div className="container nav-row centered">
+        {/* show navigation actions when not on home */}
+        {!isHome && (
+          <div className="nav-actions">
+            <button
+              type="button"
+              className="btn icon-btn nav-back"
+              onClick={() => navigate(-1)}
+              aria-label="Volver atrás"
+            >
+              <FaArrowLeft />
+            </button>
+
+            <button
+              type="button"
+              className="btn icon-btn nav-home"
+              onClick={() => navigate('/')}
+              aria-label="Ir al inicio"
+            >
+              <FaHome />
+            </button>
+          </div>
+        )}
+
         <a className="brand" href="#" aria-label="UTN">
           <div className="brand-logo" aria-hidden>
             <FaGraduationCap />

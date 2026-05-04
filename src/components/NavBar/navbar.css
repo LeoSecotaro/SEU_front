@@ -54,10 +54,6 @@
 .main-nav a{color:var(--text);text-decoration:none}
 .nav-actions{display:flex;align-items:center;gap:12px}
 
-.btn{padding:10px 16px;border-radius:8px;text-decoration:none;display:inline-block}
-.btn.primary{background:var(--accent);color:#0b1720;font-weight:700}
-.btn.ghost{border:0}
-
 /* make the header container a positioned parent so we can absolutely place brand/actions */
 .site-header .container{position:relative}
 
@@ -98,22 +94,53 @@
 
 /* actions on the right in the third column */
 .nav-actions{
-  position: relative;
-  right: auto;
-  top: auto;
-  transform: none;
+  position: absolute;
+  /* align to viewport left like other full-bleed elements */
+  left: calc(50% - 50vw + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  justify-self: start;
+  z-index: 80;
+  gap: 8px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  justify-self: end;
 }
 
-/* Ensure toggle appears on the right in mobile, but keep it in flow */
-.nav-toggle{
-  display: none;
-  border: 0;
-  background: transparent;
+/* Place nav-actions flush to the very left edge of the viewport and remove white border */
+.nav-actions {
+  position: absolute;
+  /* align to viewport left like other full-bleed elements */
+  left: calc(50% - 50vw + 12px);
+  top: 50%;
+  transform: translateY(-50%);
+  justify-self: start;
+  z-index: 80;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+}
+
+/* Icon buttons in the left actions: remove white border and heavy shadow */
+.nav-actions .btn.icon-btn {
+  border: none !important;
+  box-shadow: none !important;
+  background: rgba(7,18,34,0.08);
+  color: var(--text);
   padding: 8px;
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: transform 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.nav-actions .btn.icon-btn:hover,
+.nav-actions .btn.icon-btn:focus {
+  transform: translateY(-4px);
+  background: rgba(7,18,34,0.18);
+  box-shadow: 0 8px 20px rgba(2,6,23,0.08);
 }
 
 /* center brand when nav is minimal */

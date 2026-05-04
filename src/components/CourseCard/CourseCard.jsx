@@ -4,7 +4,17 @@ import { FaRegClock, FaUserFriends, FaArrowRight, FaBookOpen } from 'react-icons
 import { Link } from 'react-router-dom'
 
 export default function CourseCard({ course }) {
-  const badge = (course.labels && course.labels[0] && course.labels[0].name) || course.label_name || course.category || ''
+  // helper to safely show values that may be strings or objects like { id, name }
+  const asText = (v) => {
+    if (v === null || typeof v === 'undefined') return ''
+    if (typeof v === 'object') return v.name || ''
+    return String(v)
+  }
+
+  const badge = (course.labels && course.labels[0] && asText(course.labels[0])) || asText(course.label_name) || asText(course.category) || ''
+  const modeName = asText(course.mode_name) || asText(course.mode) || ''
+  const quota = typeof course.quota !== 'undefined' && course.quota !== null ? course.quota : '—'
+
   return (
     <article className="course-card">
       <div className="hero">
@@ -13,15 +23,18 @@ export default function CourseCard({ course }) {
       </div>
 
       <div className="body">
-        <h3>{course.name}</h3>
+        <h3>{asText(course.name)}</h3>
+
+        {/* mode pill under title */}
+        {modeName && <div className="mode-pill">{modeName}</div>}
 
         <div className="meta">
-          <span className="meta-item"><FaRegClock className="icon" /> {course.duration || '—'}</span>
-          <span className="meta-item"><FaUserFriends className="icon" /> {course.mode_name || '—'}</span>
+          <span className="meta-item"><FaRegClock className="icon" /> {asText(course.duration) || '—'}</span>
+          <span className="meta-item"><FaUserFriends className="icon" /> {quota}</span>
         </div>
 
         <div className="footer">
-          <div className="starts">INICIA <strong>{course.start_date}</strong></div>
+          <div className="starts">INICIA <strong>{asText(course.start_date)}</strong></div>
           <Link className="btn small" to={`/courses/${course.id}`}>Ver Detalles <FaArrowRight /></Link>
         </div>
       </div>

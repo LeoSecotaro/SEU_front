@@ -11,15 +11,27 @@ function formatTimeFromISO(iso) {
   }
 }
 
+function normalizeTimeString(t) {
+  if (!t && t !== 0) return null
+  // if contains 'T' treat as ISO
+  if (typeof t === 'string' && t.includes('T')) return formatTimeFromISO(t)
+  // if HH:MM:SS or HH:MM, return HH:MM
+  if (typeof t === 'string') return t.slice(0,5)
+  return String(t)
+}
+
 function formatSchedule(schedule, days) {
-  // If days array provided, prefer showing days + time (if available)
+  // If days array provided, prefer showing days + per-day time (if available)
   if (Array.isArray(days) && days.length > 0) {
-    const names = days.map(d => (d && (d.name || d.title)) || String(d)).join(' · ')
-    // attempt to extract time from schedule (ISO string or object)
-    let time = null
-    if (typeof schedule === 'string') time = formatTimeFromISO(schedule)
-    else if (typeof schedule === 'object' && schedule.start) time = formatTimeFromISO(schedule.start)
-    return time ? `${names} ${time}` : names
+    const parts = days.map(d => {
+      const name = (d && (d.name || d.title || d.day_name || d.day)) || String(d)
+      const start = normalizeTimeString(d && (d.start_time || d.start || d.start_time_local))
+      const end = normalizeTimeString(d && (d.end_time || d.end || d.end_time_local))
+      if (start && end) return `${name} ${start}–${end}`
+      if (start) return `${name} ${start}`
+      return name
+    })
+    return parts.join(' · ')
   }
 
   // fallback to previous behaviors

@@ -170,7 +170,7 @@
   display: flex; 
   flex-direction: column; 
   gap: 0; 
-  margin-top: 16px; 
+  margin-top: 16px;  
 }
 
 .topic-item { 

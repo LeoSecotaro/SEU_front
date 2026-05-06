@@ -11,7 +11,15 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path // keep the same path when forwarding
+        // keep the /api prefix so Rails receives /api/v1/... routes correctly
+        // no rewrite
+      },
+      // Proxy Devise routes mounted at root (e.g. /users/sign_in)
+      '/users': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path
       }
     }
   }

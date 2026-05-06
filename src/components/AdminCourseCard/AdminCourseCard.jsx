@@ -2,16 +2,18 @@ import React, { useState } from 'react'
 import { FiEdit2, FiTrash2 } from 'react-icons/fi'
 import '../../pages/Admin/AdminCourses.css'
 
-export default function AdminCourseCard({ course }) {
+export default function AdminCourseCard({ course, onEdit, onDelete }) {
   const [openTopics, setOpenTopics] = useState(false)
 
   const toggleTopics = () => setOpenTopics(v => !v)
 
   const handleEdit = () => {
+    if (typeof onEdit === 'function') return onEdit()
     console.log('Editar', course.id)
   }
 
   const handleDelete = () => {
+    if (typeof onDelete === 'function') return onDelete()
     console.log('Eliminar', course.id)
   }
 

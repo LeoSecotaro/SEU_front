@@ -6,7 +6,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      // Proxy any request starting with /api to the Rails backend on :3000
+      // Specific rule for admin routes: /api/admin/... -> http://localhost:3000/admin/...
+      '/api/admin': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        secure: false,
+        rewrite: (path) => path.replace(/^\/api\/admin/, '/admin')
+      },
+      // Proxy any other request starting with /api to the Rails backend on :3000
       '/api': {
         target: 'http://localhost:3000',
         changeOrigin: true,

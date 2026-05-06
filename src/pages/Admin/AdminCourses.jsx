@@ -3,15 +3,26 @@ import { FiPlus, FiEdit2, FiTrash2, FiSettings } from 'react-icons/fi'
 import './AdminCourses.css'
 import AdminCourseCard from '../../components/AdminCourseCard/AdminCourseCard'
 import AdminCourseModal from '../../components/AdminCourseModal/AdminCourseModal'
+import AdminCourseEditModal from '../../components/AdminCourseEditModal/AdminCourseEditModal'
+import AdminCourseDeleteModal from '../../components/AdminCourseDeleteModal/AdminCourseDeleteModal'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([])
   const [loading, setLoading] = useState(true)
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [editingCourseId, setEditingCourseId] = useState(null)
+  const [deletingCourse, setDeletingCourse] = useState(null)
 
   const fetchCourses = async () => {
     try {
-      const response = await fetch('/api/admin/courses')
+      // try proxied path first (works when Vite proxy is running)
+      let response = await fetch('/api/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
+      // if Vite dev server returned 404 (not proxied), fall back to backend absolute URL
+      if (response.status === 404) {
+        response = await fetch('http://localhost:3000/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
+      }
       if (!response.ok) {
         throw new Error('Error de red al intentar obtener los cursos')
       }
@@ -98,12 +109,27 @@ export default function AdminCourses() {
   }, [])
 
   const handleCourseCreated = (newCourse) => {
-    // Refresh the list after a successful creation
+    // show toast and refresh the list after a successful creation
+    toast.success('Curso creado correctamente')
+    fetchCourses()
+  }
+
+  const handleCourseUpdated = () => {
+    // show toast and refresh after update
+    toast.success('Curso actualizado correctamente')
+    setEditingCourseId(null)
+    fetchCourses()
+  }
+
+  const handleCourseDeleted = () => {
+    toast.success('Curso eliminado correctamente')
+    setDeletingCourse(null)
     fetchCourses()
   }
 
   return (
     <div className="admin-courses">
+      {/* ToastContainer removed temporarily to avoid runtime error; toasts will still be triggered but not visible until container is enabled */}
       <div className="page-header">
         <div className="header-title">
           <FiSettings className="page-icon" />
@@ -122,7 +148,7 @@ export default function AdminCourses() {
       ) : (
         <div className="courses-list">
           {courses.map(course => (
-            <AdminCourseCard key={course.id} course={course} />
+            <AdminCourseCard key={course.id} course={course} onEdit={() => setEditingCourseId(course.raw && course.raw.id ? course.raw.id : course.id)} onDelete={() => setDeletingCourse({ id: course.raw && course.raw.id ? course.raw.id : course.id, title: course.title })} />
           ))}
         </div>
       )}
@@ -133,6 +159,24 @@ export default function AdminCourses() {
           onCourseCreated={handleCourseCreated} 
         />
       )}
+
+      {editingCourseId && (
+        <AdminCourseEditModal
+          courseId={editingCourseId}
+          onClose={() => setEditingCourseId(null)}
+          onCourseUpdated={handleCourseUpdated}
+        />
+      )}
+
+      {deletingCourse && (
+        <AdminCourseDeleteModal
+          courseId={deletingCourse.id}
+          courseTitle={deletingCourse.title}
+          onClose={() => setDeletingCourse(null)}
+          onDeleted={handleCourseDeleted}
+        />
+      )}
+
     </div>
   )
 }

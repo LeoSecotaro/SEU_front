@@ -269,19 +269,29 @@
   border-radius: 0 0 12px 12px;
 }
 
-.btn-secondary {
-  padding: 10px 20px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  color: #475569;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
+/* Button hover lift for modal actions */
+.admin-course-modal .btn-primary,
+.admin-course-modal .btn-secondary {
+  transition: transform 160ms ease, box-shadow 160ms ease;
+  will-change: transform, box-shadow;
 }
 
-.btn-secondary:hover {
-  background: #f1f5f9;
+.admin-course-modal .btn-primary:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(2,6,23,0.10);
+}
+.admin-course-modal .btn-primary:active {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(2,6,23,0.08);
+}
+
+.admin-course-modal .btn-secondary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 20px rgba(2,6,23,0.06);
+}
+.admin-course-modal .btn-secondary:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 12px rgba(2,6,23,0.04);
 }
 
 /* day-time selectors inside sidebar */

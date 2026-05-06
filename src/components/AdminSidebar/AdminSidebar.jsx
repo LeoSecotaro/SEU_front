@@ -28,7 +28,7 @@ export default function AdminSidebar({ onLogout }) {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/categories" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <NavLink to="/admin/labels" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
               <FiTag className="nav-icon" />
               <div className="nav-text">
                 <span className="nav-title">Categorías</span>

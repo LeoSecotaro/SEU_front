@@ -10,6 +10,8 @@ import CourseDetails from './pages/CourseDetails'
 import Login from './pages/Login/Login'
 import AdminLayout from './pages/Admin/AdminLayout'
 import AdminCourses from './pages/Admin/AdminCourses'
+import AdminLabels from './pages/Admin/AdminLabels'
+import AdminModalities from './pages/Admin/AdminModalities'
 
 const MainLayout = () => {
   return (
@@ -55,7 +57,8 @@ function App() {
             <Route index element={<AdminCourses />} />
             {/* Futuras rutas: /admin/categories, /admin/modalities, etc. */}
             <Route path="categories" element={<div>Módulo Categorías (Próximamente)</div>} />
-            <Route path="modalities" element={<div>Módulo Modalidades (Próximamente)</div>} />
+            <Route path="labels" element={<AdminLabels />} />
+            <Route path="modalities" element={<AdminModalities />} />
             <Route path="schedules" element={<div>Módulo Horarios (Próximamente)</div>} />
           </Route>
         </Routes>

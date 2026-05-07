@@ -3,6 +3,7 @@ import { FiEdit2, FiTrash2, FiPlus, FiCheck, FiX } from 'react-icons/fi'
 import './AdminModalities.css'
 import { toast } from 'react-toastify'
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
+import { apiGet, apiPost, apiPut } from '../../api/client'
 
 export default function AdminModalities() {
   const [modes, setModes] = useState([])
@@ -15,12 +16,7 @@ export default function AdminModalities() {
   const fetchModes = async () => {
     setLoading(true)
     try {
-      let res = await fetch('/api/admin/modes', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      if (res.status === 404) {
-        res = await fetch('http://localhost:3000/admin/modes', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      }
-      if (!res.ok) throw new Error('Error fetching modes')
-      const data = await res.json()
+      const data = await apiGet('/api/admin/modes', { includeCredentials: true })
       const list = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : Object.values(data).flat())
       setModes(list.filter(Boolean))
     } catch (err) {
@@ -37,29 +33,7 @@ export default function AdminModalities() {
     const name = newName.trim()
     if (!name) return
     try {
-      let res = await fetch('/api/admin/modes', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ mode: { name } })
-      })
-      if (res.status === 404) {
-        const r2 = await fetch('http://localhost:3000/admin/modes', {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ mode: { name } })
-        })
-        if (!r2.ok) throw new Error('Create failed')
-        await fetchModes()
-        setNewName('')
-        toast.success('Modalidad creada')
-        return
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(() => null)
-        throw new Error(err && err.error ? err.error : 'Error creando modalidad')
-      }
+      await apiPost('/api/admin/modes', { mode: { name } }, { includeCredentials: true })
       setNewName('')
       toast.success('Modalidad creada')
       fetchModes()
@@ -83,24 +57,7 @@ export default function AdminModalities() {
     const name = (editingName || '').trim()
     if (!name) return
     try {
-      let res = await fetch(`/api/admin/modes/${id}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ mode: { name } })
-      })
-      if (res.status === 404) {
-        res = await fetch(`http://localhost:3000/admin/modes/${id}`, {
-          method: 'PUT',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ mode: { name } })
-        })
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(() => null)
-        throw new Error(err && err.error ? err.error : 'Error actualizando')
-      }
+      await apiPut(`/api/admin/modes/${id}`, { mode: { name } }, { includeCredentials: true })
       toast.success('Modalidad actualizada')
       cancelEdit()
       fetchModes()

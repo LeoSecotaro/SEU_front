@@ -116,14 +116,20 @@
 
 .input-icon {
   position: absolute;
-  left: 14px;
+  left: 12px; /* slightly more space from the left edge */
   color: #94a3b8;
-  font-size: 16px;
+  font-size: 14px; /* maintain compact icon size */
+  z-index: 2; /* ensure icon renders above the input text */
+  pointer-events: none; /* so clicks go to the input */
+  width: 28px; /* fixed container to avoid overlap */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .input-wrapper input {
   width: 100%;
-  padding: 12px 46px 12px 40px; /* espacio derecho aumentado para el botón de ojo */
+  padding: 12px 46px 12px 44px; /* default left padding */
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 14px;
@@ -132,6 +138,11 @@
   outline: none;
   transition: all 0.2s ease;
   box-sizing: border-box;
+}
+
+/* Give the email input a bit more left padding because its icon is wider */
+.input-wrapper input#email {
+  padding-left: 44px;
 }
 
 /* Estilos para el botón mostrar/ocultar contraseña */

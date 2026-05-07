@@ -12,6 +12,7 @@ import AdminLayout from './pages/Admin/AdminLayout'
 import AdminCourses from './pages/Admin/AdminCourses'
 import AdminLabels from './pages/Admin/AdminLabels'
 import AdminModalities from './pages/Admin/AdminModalities'
+import AdminSchedules from './pages/Admin/AdminSchedules'
 
 const MainLayout = () => {
   return (
@@ -59,7 +60,7 @@ function App() {
             <Route path="categories" element={<div>Módulo Categorías (Próximamente)</div>} />
             <Route path="labels" element={<AdminLabels />} />
             <Route path="modalities" element={<AdminModalities />} />
-            <Route path="schedules" element={<div>Módulo Horarios (Próximamente)</div>} />
+            <Route path="schedules" element={<AdminSchedules />} />
           </Route>
         </Routes>
       </BrowserRouter>

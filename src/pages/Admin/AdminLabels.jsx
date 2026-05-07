@@ -3,6 +3,7 @@ import { FiEdit2, FiTrash2, FiPlus, FiCheck, FiX } from 'react-icons/fi'
 import './AdminLabels.css'
 import { toast } from 'react-toastify'
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
+import { apiGet, apiPost, apiPut } from '../../api/client'
 
 export default function AdminLabels() {
   const [labels, setLabels] = useState([])
@@ -15,13 +16,7 @@ export default function AdminLabels() {
   const fetchLabels = async () => {
     setLoading(true)
     try {
-      let res = await fetch('/api/admin/labels', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      if (res.status === 404) {
-        res = await fetch('http://localhost:3000/admin/labels', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      }
-      if (!res.ok) throw new Error('Error fetching labels')
-      const data = await res.json()
-      // Accept different shapes: array or { data: [...] }
+      const data = await apiGet('/api/admin/labels', { includeCredentials: true })
       const list = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : Object.values(data).flat())
       setLabels(list.filter(Boolean))
     } catch (err) {
@@ -38,29 +33,7 @@ export default function AdminLabels() {
     const name = newName.trim()
     if (!name) return
     try {
-      const res = await fetch('/api/admin/labels', {
-        method: 'POST',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ label: { name } })
-      })
-      if (res.status === 404) {
-        const r2 = await fetch(`http://localhost:3000/admin/labels`, {
-          method: 'POST',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ label: { name } })
-        })
-        if (!r2.ok) throw new Error('Create failed')
-        await fetchLabels()
-        setNewName('')
-        toast.success('Categoría creada')
-        return
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(() => null)
-        throw new Error(err && err.error ? err.error : 'Error creando categoría')
-      }
+      await apiPost('/api/admin/labels', { label: { name } }, { includeCredentials: true })
       setNewName('')
       toast.success('Categoría creada')
       fetchLabels()
@@ -84,24 +57,7 @@ export default function AdminLabels() {
     const name = (editingName || '').trim()
     if (!name) return
     try {
-      let res = await fetch(`/api/admin/labels/${id}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({ label: { name } })
-      })
-      if (res.status === 404) {
-        res = await fetch(`http://localhost:3000/admin/labels/${id}`, {
-          method: 'PUT',
-          credentials: 'include',
-          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-          body: JSON.stringify({ label: { name } })
-        })
-      }
-      if (!res.ok) {
-        const err = await res.json().catch(() => null)
-        throw new Error(err && err.error ? err.error : 'Error actualizando')
-      }
+      await apiPut(`/api/admin/labels/${id}`, { label: { name } }, { includeCredentials: true })
       toast.success('Categoría actualizada')
       cancelEdit()
       fetchLabels()

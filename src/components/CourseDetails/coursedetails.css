@@ -8,7 +8,10 @@
   right: 50% !important;
   margin-left: -50vw !important;
   margin-right: -50vw !important;
-  background: #0b1426 !important;
+  /* dotted overlay (like login) above the solid dark background */
+  background-image: radial-gradient(rgba(31,41,55,0.9) 1px, transparent 1px), linear-gradient(180deg, #0b1426 0%, #0b1426 100%);
+  background-size: 24px 24px, auto !important;
+  background-color: #0b1426 !important;
   padding: 80px 24px 120px !important;
   text-align: left !important;
   box-sizing: border-box !important;
@@ -455,14 +458,8 @@
   border-top-right-radius: 14px !important;
 }
 
-/* Slight inner contrast line under the header to match example */
-.price-card .price-header::after {
-  content: '';
-  display: block;
-  height: 1px;
-  background: rgba(255,255,255,0.06);
-  margin-top: 0;
-}
+/* Remove the subtle divider line under the price header as requested */
+.price-card .price-header::after { display: none !important; }
 
 /* Make main content appear as a rounded white card like the example */
 .course-content {

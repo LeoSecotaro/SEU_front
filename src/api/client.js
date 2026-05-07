@@ -38,3 +38,12 @@ export function apiDelete(path, { includeCredentials = false } = {}) {
     credentials: includeCredentials ? 'include' : 'same-origin'
   }).then(handleResponse);
 }
+
+export function apiPut(path, body, { includeCredentials = false } = {}) {
+  return fetch(API_BASE + path, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    credentials: includeCredentials ? 'include' : 'same-origin',
+    body: JSON.stringify(body)
+  }).then(handleResponse);
+}

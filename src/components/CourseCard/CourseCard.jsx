@@ -15,11 +15,30 @@ export default function CourseCard({ course }) {
   const modeName = asText(course.mode_name) || asText(course.mode) || ''
   const quota = typeof course.quota !== 'undefined' && course.quota !== null ? course.quota : '—'
 
+  // resolve image URL (relative paths from Rails are fine as-is)
+  const resolveImageSrc = (url) => {
+    if (!url) return ''
+    if (url.startsWith('http') || url.startsWith('//')) return url
+    // allow absolute paths from backend (e.g. /rails/active_storage/...)
+    return url
+  }
+
   return (
     <article className="course-card">
       <div className="hero">
         {badge && <span className="course-badge">{badge}</span>}
-        <div className="hero-icon" aria-hidden><FaBookOpen /></div>
+        {course.image_url ? (
+          <img
+            className="hero-img"
+            src={resolveImageSrc(course.image_url)}
+            alt={asText(course.name) || 'Course image'}
+            loading="lazy"
+          />
+        ) : (
+          <div className="hero-placeholder" aria-hidden>
+            <FaBookOpen className="hero-icon" />
+          </div>
+        )}
       </div>
 
       <div className="body">

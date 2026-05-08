@@ -20,8 +20,12 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     price: '',
     price_is_monthly: false,
     course_topics_attributes: [],
-    course_days_attributes: []
+    course_days_attributes: [],
+    image_url: ''
   })
+
+  const [imageFile, setImageFile] = useState(null)
+  const [imagePreview, setImagePreview] = useState('')
 
   const [modes, setModes] = useState([])
   const [days, setDays] = useState([])
@@ -125,8 +129,10 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
           price: c.price != null ? String(c.price) : '',
           price_is_monthly: !!c.price_is_monthly,
           course_topics_attributes: topics,
-          course_days_attributes: courseDaysAttrs
+          course_days_attributes: courseDaysAttrs,
+          image_url: c.image_url || ''
         })
+        if (c.image_url) setImagePreview(c.image_url)
       } catch (err) {
         console.error('Error loading course for edit', err)
       } finally {
@@ -140,6 +146,17 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target
     setFormData(prev => ({ ...prev, [name]: type === 'checkbox' ? checked : value }))
+  }
+
+  const handleFileChange = (e) => {
+    const f = e.target.files && e.target.files[0]
+    if (!f) {
+      setImageFile(null)
+      setImagePreview('')
+      return
+    }
+    setImageFile(f)
+    setImagePreview(URL.createObjectURL(f))
   }
 
   const handleArrayChange = (e, field) => {
@@ -229,11 +246,16 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     }
 
     try {
-      const res = await fetch(`/api/admin/courses/${courseId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
+      let res
+      if (imageFile) {
+        const fd = new FormData()
+        fd.append('course', JSON.stringify(payload.course))
+        fd.append('image', imageFile)
+        res = await fetch(`/api/admin/courses/${courseId}`, { method: 'PATCH', body: fd })
+      } else {
+        if (formData.image_url) payload.course.image_url = formData.image_url
+        res = await fetch(`/api/admin/courses/${courseId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+      }
       if (res.ok) {
         const updated = await res.json()
         onCourseUpdated && onCourseUpdated(updated)
@@ -311,6 +333,43 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
                 </div>
               </div>
 
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Email de contacto</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} />
+                </div>
+
+                <div className="form-group">
+                  <label>Teléfono</label>
+                  <input type="text" name="phone_number" value={formData.phone_number} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Dirección</label>
+                  <input type="text" name="address" value={formData.address} onChange={handleChange} />
+                </div>
+
+                <div className="form-group">
+                  <label>Duración (texto)</label>
+                  <input type="text" name="duration" placeholder="Ej: 40 horas" value={formData.duration} onChange={handleChange} />
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Carga horaria (num)</label>
+                  <input type="text" name="hourly_load" value={formData.hourly_load} onChange={handleChange} />
+                </div>
+
+                <div className="form-group">
+                  {/* placeholder column to keep layout balanced */}
+                  <label style={{ visibility: 'hidden' }}>placeholder</label>
+                  <div />
+                </div>
+              </div>
+
               {/* Temario Dinámico */}
               <div className="form-group full-width topics-section">
                 <div className="topics-header">
@@ -336,12 +395,24 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
                   })}
                 </div>
               </div>
-
             </div>
 
-            <div className="selection-lists">
-              <div className="checkbox-list-container">
-                <label>Días de cursada</label>
+            <div className="form-column-sidebar">
+              <div className="form-group full-width">
+                <label>Imagen del curso</label>
+                <div className="image-upload">
+                  {imagePreview && (
+                    <div className="image-preview">
+                      <img src={imagePreview} alt="Vista previa" />
+                      <button type="button" className="btn-icon" onClick={() => { setImageFile(null); setImagePreview('') }}><FiX /></button>
+                    </div>
+                  )}
+                  <input type="file" accept="image/*" onChange={handleFileChange} />
+                </div>
+              </div>
+
+              <div className="form-group full-width">
+                <label>Días de la semana</label>
                 <div className="checkbox-list">
                   {days.map(d => (
                     <label key={d.id} className="inline-check">
@@ -352,8 +423,8 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
                 </div>
               </div>
 
-              <div className="checkbox-list-container">
-                <label>Etiquetas / Categorías</label>
+              <div className="form-group full-width">
+                <label>Etiquetas</label>
                 <div className="checkbox-list">
                   {labels.map(l => (
                     <label key={l.id} className="inline-check">
@@ -364,23 +435,25 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
                 </div>
               </div>
 
-              <div className="day-time-list sidebar-day-times">
-                {days.filter(d => formData.day_ids.includes(Number(d.id))).map(d => {
-                  const entry = (formData.course_days_attributes || []).find(cd => Number(cd.day_id) === Number(d.id)) || { day_id: d.id, start_time: '', end_time: '' }
-                  return (
-                    <div className="day-time-card" key={d.id}>
-                      <div className="day-time-label">{d.name || d.title}</div>
-                      <div className="day-time-inputs">
-                        <label>Inicio<input type="time" value={entry.start_time || ''} onChange={e => handleDayTimeChange(d.id, 'start_time', e.target.value)} /></label>
-                        <label>Fin<input type="time" value={entry.end_time || ''} onChange={e => handleDayTimeChange(d.id, 'end_time', e.target.value)} /></label>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
             </div>
 
-          </div>
+            {/* Per-day time selectors shown under the selection lists for better discoverability */}
+            <div className="day-time-list sidebar-day-times">
+              {days.filter(d => formData.day_ids.includes(Number(d.id))).map(d => {
+                const entry = (formData.course_days_attributes || []).find(cd => Number(cd.day_id) === Number(d.id)) || { day_id: d.id, start_time: '', end_time: '' }
+                return (
+                  <div className="day-time-card" key={d.id}>
+                    <div className="day-time-label">{d.name || d.title}</div>
+                    <div className="day-time-inputs">
+                      <label>Inicio<input type="time" value={entry.start_time || ''} onChange={e => handleDayTimeChange(d.id, 'start_time', e.target.value)} /></label>
+                      <label>Fin<input type="time" value={entry.end_time || ''} onChange={e => handleDayTimeChange(d.id, 'end_time', e.target.value)} /></label>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+
+          </div> {/* .form-grid */}
 
           <div className="modal-footer">
             <button type="button" className="btn-secondary" onClick={onClose}>Cancelar</button>

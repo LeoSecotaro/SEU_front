@@ -20,8 +20,12 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
     price: '',
     price_is_monthly: false,
     course_topics_attributes: [],
-    course_days_attributes: []
+    course_days_attributes: [],
+    image_url: ''
   });
+
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState('');
 
   const [modes, setModes] = useState([]);
   const [days, setDays] = useState([]);
@@ -83,6 +87,17 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
       ...prev,
       [name]: type === 'checkbox' && name !== 'price_is_monthly' ? prev[name] : (type === 'checkbox' ? checked : value)
     }));
+  };
+
+  const handleFileChange = (e) => {
+    const f = e.target.files && e.target.files[0];
+    if (!f) {
+      setImageFile(null);
+      setImagePreview('');
+      return;
+    }
+    setImageFile(f);
+    setImagePreview(URL.createObjectURL(f));
   };
 
   // When toggling day checkboxes keep day_ids and course_days_attributes in sync
@@ -177,13 +192,27 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
     };
 
     try {
-      const response = await fetch('/api/admin/courses', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(payload)
-      });
+      let response;
+      if (imageFile) {
+        // send multipart/form-data with a JSON payload and the image file
+        const fd = new FormData();
+        fd.append('course', JSON.stringify(payload.course));
+        fd.append('image', imageFile);
+        response = await fetch('/api/admin/courses', {
+          method: 'POST',
+          body: fd
+        });
+      } else {
+        // include image_url if provided
+        if (formData.image_url) payload.course.image_url = formData.image_url
+        response = await fetch('/api/admin/courses', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+      }
 
       if (response.ok) {
         const newCourse = await response.json();
@@ -342,6 +371,19 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
 
               {/* Sidebar with days/labels */}
               <div className="selection-lists">
+                <div className="form-group full-width">
+                  <label>Imagen del curso</label>
+                  <div className="image-upload">
+                    {imagePreview && (
+                      <div className="image-preview">
+                        <img src={imagePreview} alt="Vista previa" />
+                        <button type="button" className="btn-icon" onClick={() => { setImageFile(null); setImagePreview('') }}><FiX /></button>
+                      </div>
+                    )}
+                    <input type="file" accept="image/*" onChange={handleFileChange} />
+                  </div>
+                </div>
+
                 <div className="checkbox-list-container">
                   <label>Días de cursada</label>
                   <div className="checkbox-list">

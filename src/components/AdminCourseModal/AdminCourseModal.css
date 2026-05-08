@@ -59,6 +59,7 @@
 .modal-body {
   padding: 20px 24px;
   overflow-y: auto;
+  overflow-x: hidden; /* prevent horizontal clipping/scroll from wide children */
   flex: 1;
 }
 
@@ -66,6 +67,7 @@
   display: grid;
   grid-template-columns: 1fr 340px; /* reduce sidebar a bit */
   gap: 18px;
+  align-items: start; /* keep main and sidebar aligned to top */
 }
 
 .form-group {
@@ -128,6 +130,9 @@
   align-items: start;
   justify-content: stretch;
   max-width: 360px; /* limit sidebar width to avoid huge empty gaps */
+  padding: 12px; /* add internal spacing so lists aren't flush to the edge */
+  box-sizing: border-box; /* include padding in width calculations */
+  border-radius: 8px; /* subtle visual separation */
 }
 
 .checkbox-list-container {
@@ -296,28 +301,43 @@
 
 /* day-time selectors inside sidebar */
 .sidebar-day-times {
-  margin-top: -350px; /* lifted closer to the day checkboxes */
-  grid-column: 1 / -1;
+  /* Move day-time selectors to span full width or align properly */
+  grid-column: 1 / -1; /* Permite que ocupe todo el ancho disponible si está en un grid padre, o ajusta según contenedor */
+  margin-top: 16px;
+  position: relative; 
+  padding: 0; 
+  background: transparent;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%; /* Take full width of the sidebar column */
 }
 
 .day-time-card {
   background: #fff;
   border: 1px solid #e2e8f0;
-  padding: 10px;
-  border-radius: 6px;
-  margin-bottom: 10px;
+  padding: 14px;
+  border-radius: 8px;
+  margin: 0; 
+  width: 100%; /* Stretch across the entire available space */
+  box-sizing: border-box;
+  display: flex; /* Añadir flex para controlar el contenido interno */
+  flex-direction: column;
 }
 
 .day-time-label {
   font-weight: 600;
   color: #334155;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
 }
 
 .day-time-inputs {
   display: flex;
-  gap: 8px;
+  gap: 12px;
   align-items: center;
+  justify-content: space-between; /* Distribuye el espacio vacio para estirarlos como en el ejemplo */
+  width: 100%; /* Asegura que el contenedor de inputs tome todo el ancho de la tarjeta */
 }
 
 .day-time-inputs label {
@@ -325,12 +345,16 @@
   flex-direction: column;
   font-size: 13px;
   color: #475569;
+  flex: 1; /* Permite que cada input crezca para ocupar el espacio */
 }
 
 .day-time-inputs input[type="time"] {
-  padding: 6px 8px;
+  padding: 8px 12px; /* Un poco más de padding para que se vean mejor al estirarse */
   border-radius: 6px;
   border: 1px solid #cbd5e1;
+  width: 100%; /* El input ocupa todo el ancho de su label (flex: 1) */
+  box-sizing: border-box;
+  font-size: 14px;
 }
 
 /* responsive: en pantallas pequeñas pasar a una sola columna */
@@ -342,6 +366,7 @@
     grid-column: 1 / -1 !important;
     display: block;
     max-width: 100%;
+    padding-right: 0; /* remove extra right padding on small screens */
   }
   .checkbox-list-container {
     width: 100%;
@@ -350,4 +375,50 @@
   .modal-content.admin-course-modal {
     max-width: 720px;
   }
+  .image-preview {
+    width: 112px;
+    height: 112px;
+  }
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.image-preview {
+  width: 140px;
+  height: 140px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  position: relative;
+  background: #f8fafc;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.image-preview .btn-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255,255,255,0.9);
+  border-radius: 6px;
+  padding: 4px;
+  border: none;
+  cursor: pointer;
+}
+
+/* Make sidebar image area smaller so modal doesn't overflow */
+.form-column-sidebar {
+  padding-left: 8px;
+  padding-right: 12px; /* ensure there is breathing room on the right */
+  min-width: 0;
 }

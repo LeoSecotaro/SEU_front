@@ -17,12 +17,8 @@ export default function AdminCourses() {
 
   const fetchCourses = async () => {
     try {
-      // try proxied path first (works when Vite proxy is running)
-      let response = await fetch('/api/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      // if Vite dev server returned 404 (not proxied), fall back to backend absolute URL
-      if (response.status === 404) {
-        response = await fetch('http://localhost:3000/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      }
+      // Use proxied API endpoint only
+      const response = await fetch('/api/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
       if (!response.ok) {
         throw new Error('Error de red al intentar obtener los cursos')
       }
@@ -129,7 +125,6 @@ export default function AdminCourses() {
 
   return (
     <div className="admin-courses">
-      {/* ToastContainer removed temporarily to avoid runtime error; toasts will still be triggered but not visible until container is enabled */}
       <div className="page-header">
         <div className="header-title">
           <FiSettings className="page-icon" />

@@ -13,6 +13,8 @@ import AdminCourses from './pages/Admin/AdminCourses'
 import AdminLabels from './pages/Admin/AdminLabels'
 import AdminModalities from './pages/Admin/AdminModalities'
 import AdminSchedules from './pages/Admin/AdminSchedules'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const MainLayout = () => {
   return (
@@ -40,6 +42,7 @@ const NavOnlyLayout = () => {
 function App() {
   return (
     <div className="app-root">
+      <ToastContainer position="top-right" autoClose={1500} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
       <BrowserRouter>
         <Routes>
           {/* Rutas con NavBar y Footer */}

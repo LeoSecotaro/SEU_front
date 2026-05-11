@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import '../AdminCourseModal/AdminCourseModal.css'
 
 export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdated }) {
@@ -223,6 +225,17 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    // validate that at least one label and one course day/time exists
+    const labelsCount = (formData.label_ids || []).filter(Boolean).length
+    const courseDaysCount = (formData.course_days_attributes || []).filter(d => !(d && d._destroy)).length
+    if (labelsCount === 0) {
+      toast.error('La entidad requiere al menos una etiqueta asignada.')
+      return
+    }
+    if (courseDaysCount === 0) {
+      toast.error('La entidad requiere al menos un horario/día asignado.')
+      return
+    }
     setSubmitting(true)
     const payload = {
       course: {
@@ -260,17 +273,53 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
         const updated = await res.json()
         onCourseUpdated && onCourseUpdated(updated)
         onClose()
+        // success toast handled by parent page
       } else {
         const err = await res.json()
-        alert('Error al actualizar: ' + JSON.stringify(err))
+        const message = translateBackendErrors(err)
+        toast.error(message)
+        console.error('Validation errors:', err);
       }
     } catch (err) {
-      console.error('Update error', err)
-      alert('Error de red al actualizar')
+      console.error('Submission error:', err);
+      toast.error('Error de red al actualizar el curso');
     } finally {
       setSubmitting(false)
     }
   }
+
+  // helper to translate known backend validation messages to Spanish
+  const translateBackendErrors = (errData) => {
+    if (!errData) return 'Error desconocido';
+    const mapMessage = (msg) => {
+      if (!msg) return '';
+      if (typeof msg === 'string') {
+        if (msg.match(/Course days start time/i)) return 'El horario del día requiere hora de inicio.';
+        if (msg.match(/Course days end time/i)) return 'El horario del día requiere hora de fin.';
+        if (msg.match(/can't be blank/i)) return msg.replace(/can't be blank/i, 'no puede estar vacío');
+        return msg;
+      }
+      return String(msg);
+    };
+
+    if (errData.errors) {
+      if (Array.isArray(errData.errors)) {
+        return errData.errors.map(mapMessage).filter(Boolean).join('; ');
+      }
+      if (typeof errData.errors === 'object') {
+        return Object.entries(errData.errors)
+          .map(([field, messages]) => {
+            const msgs = Array.isArray(messages) ? messages : [messages];
+            return `${field}: ${msgs.map(mapMessage).join(', ')}`;
+          })
+          .join('; ');
+      }
+      return mapMessage(errData.errors);
+    }
+
+    if (errData.error) return mapMessage(errData.error);
+    return JSON.stringify(errData);
+  };
 
   if (loadingOptions || loadingCourse) return (
     <div className="modal-overlay"><div className="modal-content admin-course-modal"><div className="modal-body">Cargando...</div></div></div>

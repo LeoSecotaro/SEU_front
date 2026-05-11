@@ -80,8 +80,8 @@ export default function AdminSchedules() {
   return (
     <div className="admin-labels">
       <div className="labels-header">
-        <h2>Días y Horarios</h2>
-        <p className="muted">Plantillas de horario — define plantillas como "Lunes 9-11, Miércoles 18-20" u opciones simples como "Lunes".</p>
+        <h2>Días</h2>
+        <p className="muted">Define los días de la semana.</p>
       </div>
 
       <div className="labels-list">
@@ -113,7 +113,7 @@ export default function AdminSchedules() {
       </div>
 
       <div className="labels-add">
-        <input placeholder="Ej: Lunes 9-11" value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleCreate() }} />
+        <input placeholder="Ej: Lunes" value={newName} onChange={e => setNewName(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleCreate() }} />
         <button className="btn-primary" onClick={handleCreate}><FiPlus /> Agregar</button>
       </div>
 

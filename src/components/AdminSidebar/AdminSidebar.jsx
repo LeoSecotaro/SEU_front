@@ -49,8 +49,8 @@ export default function AdminSidebar({ onLogout }) {
             <NavLink to="/admin/schedules" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
               <FiClock className="nav-icon" />
               <div className="nav-text">
-                <span className="nav-title">Días y Horarios</span>
-                <span className="nav-desc">Plantillas de horario</span>
+                <span className="nav-title">Días</span>
+                <span className="nav-desc">Plantillas de días</span>
               </div>
             </NavLink>
           </li>

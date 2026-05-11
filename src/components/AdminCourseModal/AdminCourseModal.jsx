@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi';
+import PropTypes from 'prop-types';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './AdminCourseModal.css';
 
 export default function AdminCourseModal({ onClose, onCourseCreated }) {
@@ -168,6 +171,17 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // validate required nested attributes before sending to backend
+    const labelsCount = (formData.label_ids || []).filter(Boolean).length;
+    const courseDaysCount = (formData.course_days_attributes || []).filter(d => !(d && d._destroy)).length;
+    if (labelsCount === 0) {
+      toast.error('La entidad requiere al menos una etiqueta asignada.');
+      return;
+    }
+    if (courseDaysCount === 0) {
+      toast.error('La entidad requiere al menos un horario/día asignado.');
+      return;
+    }
     setSubmitting(true);
 
     const payload = {
@@ -218,17 +232,60 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
         const newCourse = await response.json();
         onCourseCreated(newCourse);
         onClose();
+        // success toast handled by parent page to avoid duplicates
       } else {
         const errData = await response.json();
-        alert('Error al crear el curso: ' + JSON.stringify(errData));
+        const errorMessage = translateBackendErrors(errData);
+        toast.error(errorMessage);
+        console.error('Validation errors:', errData);
       }
     } catch (error) {
       console.error('Submission error:', error);
-      alert('Error de red al crear el curso');
+      toast.error('Error de red al crear el curso');
     } finally {
       setSubmitting(false);
     }
   };
+
+  // helper to translate known backend validation messages to Spanish
+  const translateBackendErrors = (errData) => {
+    if (!errData) return 'Error desconocido';
+    const mapMessage = (msg) => {
+      if (!msg) return '';
+      // exact or partial matches
+      if (typeof msg === 'string') {
+        if (msg.match(/Course days start time/i)) return 'El horario del día requiere hora de inicio.';
+        if (msg.match(/Course days end time/i)) return 'El horario del día requiere hora de fin.';
+        // generic blank messages
+        if (msg.match(/can't be blank/i)) return msg.replace(/can't be blank/i, 'no puede estar vacío');
+        return msg;
+      }
+      return String(msg);
+    };
+
+    if (errData.errors) {
+      if (Array.isArray(errData.errors)) {
+        return errData.errors.map(mapMessage).filter(Boolean).join('; ');
+      }
+      if (typeof errData.errors === 'object') {
+        return Object.entries(errData.errors)
+          .map(([field, messages]) => {
+            const msgs = Array.isArray(messages) ? messages : [messages];
+            return `${field}: ${msgs.map(mapMessage).join(', ')}`;
+          })
+          .join('; ');
+      }
+      return mapMessage(errData.errors);
+    }
+
+    // fallback
+    if (errData.error) return mapMessage(errData.error);
+    return JSON.stringify(errData);
+  };
+
+  if (loadingOptions) return (
+    <div className="modal-overlay"><div className="modal-content admin-course-modal"><div className="modal-body">Cargando...</div></div></div>
+  )
 
   return (
     <div className="modal-overlay">

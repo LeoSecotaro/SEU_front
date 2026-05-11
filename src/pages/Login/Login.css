@@ -129,7 +129,7 @@
 
 .input-wrapper input {
   width: 100%;
-  padding: 12px 46px 12px 44px; /* default left padding */
+  padding: 12px 46px 12px 56px; /* increased left padding so text doesn't overlap the left icon */
   border: 1px solid #e2e8f0;
   border-radius: 8px;
   font-size: 14px;
@@ -142,7 +142,17 @@
 
 /* Give the email input a bit more left padding because its icon is wider */
 .input-wrapper input#email {
-  padding-left: 44px;
+  padding-left: 56px;
+}
+
+/* Ensure password input also has enough left padding so text doesn't overlap the left lock icon */
+.input-wrapper input#password {
+  padding-left: 56px;
+}
+
+/* Fallback: if the icon is a sibling element before the input, ensure padding */
+.input-wrapper .input-icon ~ input {
+  padding-left: 56px;
 }
 
 /* Estilos para el botón mostrar/ocultar contraseña */

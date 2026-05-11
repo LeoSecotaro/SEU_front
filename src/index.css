@@ -55,6 +55,7 @@
   margin: 0 auto;
   padding: 0;
   text-align: left;
+  box-sizing: border-box;
 }
 
 body {
@@ -62,6 +63,7 @@ body {
   padding: 0;
   width: 100%;
   min-height: 100vh;
+  overflow-x: hidden;
 }
 
 h1,

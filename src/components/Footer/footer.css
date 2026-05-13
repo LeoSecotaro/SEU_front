@@ -1,5 +1,5 @@
 .site-footer{background:#071226;color:#fff;padding:24px 0;width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);box-sizing:border-box}
-.footer-grid{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);display:grid;grid-template-columns:1fr 260px 260px;gap:20px;padding:0 64px;box-sizing:border-box}
+.footer-grid{width:100vw;margin-left:calc(50% - 50vw);margin-right:calc(50% - 50vw);display:grid;grid-template-columns:1fr 260px;gap:20px;padding:0 64px;box-sizing:border-box}
 .footer-grid .col{padding:0;text-align:left}
 .brand-logo{background:#0b1720;color:#fff;padding:10px 14px;border-radius:10px;display:inline-block;margin-right:12px}
 .muted{color:rgba(255,255,255,0.7);font-size:14px}

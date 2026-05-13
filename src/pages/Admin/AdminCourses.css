@@ -220,3 +220,43 @@
   font-size: 13.5px;
   line-height: 1.45;
 }
+
+/* Mobile adjustments: avoid overlapping action buttons with tags/ID */
+@media (max-width: 768px) {
+  .admin-course-card {
+    padding: 16px;
+  }
+
+  .course-tags {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .course-id {
+    margin-left: 0;
+    order: 3;
+    width: auto;
+  }
+
+  .course-actions {
+    /* remove absolute positioning so actions stack after content */
+    position: static;
+    top: auto;
+    right: auto;
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+
+  .btn-icon {
+    padding: 8px 10px;
+    font-size: 13px;
+  }
+
+  .btn-link {
+    padding: 8px 12px;
+  }
+}

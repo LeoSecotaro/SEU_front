@@ -123,3 +123,66 @@
 .btn-logout:hover {
   background-color: #fef2f2;
 }
+
+@media (max-width: 900px) {
+  .admin-sidebar {
+    /* hide persistent sidebar on small screens; mobile panel will slide over when open */
+    display: none;
+    position: fixed; /* keep off-screen when not open */
+    width: 280px;
+    height: 100vh;
+    z-index: 60;
+    top: 0;
+    left: 0;
+    transform: translateX(-110%);
+    transition: transform 220ms ease;
+    box-shadow: 0 8px 20px rgba(2,6,23,0.2);
+  }
+
+  .admin-sidebar.mobile-open {
+    display: flex;
+    transform: translateX(0);
+  }
+
+  .sidebar-brand {
+    padding: 16px;
+  }
+
+  .mobile-close {
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    color: #0f172a;
+    cursor: pointer;
+  }
+
+  .sidebar-nav {
+    padding: 12px 12px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 12px;
+  }
+
+  /* Add a small overlay when menu is open by relying on a sibling element via .mobile-overlay */
+}
+
+/* New styles for the header mobile menu button - placed here so CSS is co-located */
+.mobile-menu-btn {
+  display: none;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 20px;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+  .mobile-menu-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

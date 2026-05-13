@@ -30,16 +30,6 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="col">
-          <h4>Enlaces Rápidos</h4>
-          <ul>
-            <li>Todos los Cursos</li>
-            <li>Diplomaturas</li>
-            <li>Preguntas Frecuentes</li>
-            <li>Campus Virtual</li>
-          </ul>
-        </div>
-
         <div className="col contact-col">
           <h4>Contacto</h4>
           <p className="contact-line"><FaMapMarkerAlt className="contact-icon" /> Rodríguez 273, Mendoza<br/>Argentina</p>

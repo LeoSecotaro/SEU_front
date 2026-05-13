@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigate } from 'react-router-dom'
 import { FaGraduationCap } from 'react-icons/fa'
+import { FiMenu } from 'react-icons/fi'
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar'
 import './AdminLayout.css'
 import { toast } from 'react-toastify'
@@ -8,6 +9,7 @@ import { toast } from 'react-toastify'
 export default function AdminLayout() {
   const navigate = useNavigate()
   const [loadingAuth, setLoadingAuth] = useState(true)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     let mounted = true
@@ -97,9 +99,15 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-layout">
-      <AdminSidebar onLogout={handleLogout} />
+      <AdminSidebar onLogout={handleLogout} mobileOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
       <div className="admin-content">
         <header className="admin-header admin-header-dark">
+          <div className="admin-header-left">
+            <button className="mobile-menu-btn" aria-label="Abrir menú" onClick={() => setMobileMenuOpen(true)}>
+              <FiMenu />
+            </button>
+          </div>
+
           <div className="admin-header-center">
             <div className="admin-header-icon" aria-hidden>
               <FaGraduationCap />

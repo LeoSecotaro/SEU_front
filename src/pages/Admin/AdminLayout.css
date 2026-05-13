@@ -101,3 +101,19 @@
   min-height: calc(100vh - 72px);
   background-color: transparent;
 }
+
+@media (max-width: 900px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+
+  .admin-header {
+    padding: 0 16px;
+    height: 64px;
+  }
+
+  .admin-main {
+    padding: 16px;
+    min-height: calc(100vh - 64px - 56px); /* account for header + compact sidebar height */
+  }
+}

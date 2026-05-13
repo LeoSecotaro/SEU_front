@@ -24,9 +24,9 @@
 .course-card h3{margin:0 0 12px;font-size:18px;color:#0b1720}
 .course-card .meta{color:#6b7785;font-size:14px;margin-bottom:12px;display:flex;gap:18px;align-items:center}
 .course-card .meta .icon{opacity:0.9}
-.course-card .footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:auto}
+.course-card .footer{display:flex;align-items:center;justify-content:space-between;padding-top:8px;margin-top:auto;flex-wrap:wrap;gap:8px}
 .course-card .starts{color:#475569;font-size:14px}
-.btn.small{background:#071226;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:14px;border:none;display:inline-flex;align-items:center;gap:8px}
+.btn.small{background:#071226;color:#fff;padding:10px 16px;border-radius:8px;text-decoration:none;font-size:14px;border:none;display:inline-flex;align-items:center;gap:8px;flex-shrink:0}
 .btn.small:hover{transform:translateY(-1px)}
 
 /* responsive */
@@ -40,4 +40,8 @@
   .filters{justify-content:flex-start}
   .courses-grid{grid-template-columns:1fr}
   .course-card .hero{height:180px}
+  .course-card .footer{flex-direction:column;align-items:flex-start;gap:10px}
+  .btn.small{width:auto}
+  /* ensure any small badges or id chips remain above buttons */
+  .course-card .course-badge{z-index:3}
 }

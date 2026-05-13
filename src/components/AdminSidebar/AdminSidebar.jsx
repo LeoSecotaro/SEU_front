@@ -1,11 +1,15 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { FiBook, FiTag, FiMonitor, FiClock, FiSettings, FiLogOut } from 'react-icons/fi'
+import { FiBook, FiTag, FiMonitor, FiClock, FiSettings, FiLogOut, FiX } from 'react-icons/fi'
 import './AdminSidebar.css'
 
-export default function AdminSidebar({ onLogout }) {
+export default function AdminSidebar({ onLogout, mobileOpen = false, onClose = () => {} }) {
+  const handleClickLink = () => {
+    if (mobileOpen) onClose()
+  }
+
   return (
-    <aside className="admin-sidebar">
+    <aside className={`admin-sidebar ${mobileOpen ? 'mobile-open' : ''}`} aria-hidden={!mobileOpen && undefined}>
       <div className="sidebar-brand">
         <div className="brand-logo">
           {/* Logo o inicial */}
@@ -14,12 +18,18 @@ export default function AdminSidebar({ onLogout }) {
         <div className="brand-text">
           <h3>Panel Admin</h3>
         </div>
+        {/* Close button visible only when mobile menu is open */}
+        {mobileOpen && (
+          <button className="mobile-close" onClick={onClose} aria-label="Cerrar menú">
+            <FiX />
+          </button>
+        )}
       </div>
 
       <nav className="sidebar-nav">
         <ul>
           <li>
-            <NavLink to="/admin" end className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <NavLink to="/admin" end className={({isActive}) => isActive ? "nav-item active" : "nav-item"} onClick={handleClickLink}>
               <FiBook className="nav-icon" />
               <div className="nav-text">
                 <span className="nav-title">Cursos</span>
@@ -28,7 +38,7 @@ export default function AdminSidebar({ onLogout }) {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/labels" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <NavLink to="/admin/labels" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} onClick={handleClickLink}>
               <FiTag className="nav-icon" />
               <div className="nav-text">
                 <span className="nav-title">Categorías</span>
@@ -37,7 +47,7 @@ export default function AdminSidebar({ onLogout }) {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/modalities" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <NavLink to="/admin/modalities" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} onClick={handleClickLink}>
               <FiMonitor className="nav-icon" />
               <div className="nav-text">
                 <span className="nav-title">Modalidades</span>
@@ -46,7 +56,7 @@ export default function AdminSidebar({ onLogout }) {
             </NavLink>
           </li>
           <li>
-            <NavLink to="/admin/schedules" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+            <NavLink to="/admin/schedules" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} onClick={handleClickLink}>
               <FiClock className="nav-icon" />
               <div className="nav-text">
                 <span className="nav-title">Días</span>
@@ -58,7 +68,7 @@ export default function AdminSidebar({ onLogout }) {
       </nav>
 
       <div className="sidebar-footer">
-        <button onClick={onLogout} className="btn-logout">
+        <button onClick={() => { if (mobileOpen) onClose(); onLogout && onLogout() }} className="btn-logout">
           <FiLogOut className="nav-icon" />
           <span>Cerrar sesión</span>
         </button>

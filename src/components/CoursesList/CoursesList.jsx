@@ -16,7 +16,7 @@ export default function CoursesList() {
     setError(null)
     try {
       const params = new URLSearchParams({ per_page: 9 })
-      if (labelId) params.set('label_id', labelId)
+      if (labelId) params.append('label_ids[]', labelId)
       const res = await fetch(`/api/v1/courses?${params.toString()}`)
       if (!res.ok) throw new Error('Error fetching courses')
       const json = await res.json()
@@ -25,7 +25,7 @@ export default function CoursesList() {
       // fallback: try /api/courses (no v1)
       try {
         const params = new URLSearchParams({ per_page: 9 })
-        if (labelId) params.set('label_id', labelId)
+        if (labelId) params.append('label_ids[]', labelId)
         const res2 = await fetch(`/api/courses?${params.toString()}`)
         if (!res2.ok) throw e
         const j2 = await res2.json()
@@ -67,8 +67,15 @@ export default function CoursesList() {
 
   useEffect(() => {
     // refetch when label changes
+    // keep effect for cases where selectedLabel is changed elsewhere, but prefer direct fetch from handler
     fetchCourses(selectedLabel)
   }, [selectedLabel, fetchCourses])
+
+  // immediate handler for filter clicks to avoid timing issues
+  const handleSelectLabel = (labelId) => {
+    setSelectedLabel(labelId)
+    fetchCourses(labelId)
+  }
 
   if (loading) return <div className="courses-grid">Cargando...</div>
   if (error) return <div className="courses-grid">Error al cargar cursos</div>
@@ -91,7 +98,7 @@ export default function CoursesList() {
             <div className="filters" role="tablist" aria-label="Filtros de cursos">
               <button
                 className={`filter-pill ${selectedLabel === '' ? 'active' : ''}`}
-                onClick={() => setSelectedLabel('')}
+                onClick={() => handleSelectLabel('')}
                 aria-pressed={selectedLabel === ''}
               >
                 Todos
@@ -100,9 +107,9 @@ export default function CoursesList() {
               {labels.map((l) => (
                 <button
                   key={l.id || l.name}
-                  className={`filter-pill ${String(selectedLabel) === String(l.id || l.name) ? 'active' : ''}`}
-                  onClick={() => setSelectedLabel(l.id || l.name)}
-                  aria-pressed={String(selectedLabel) === String(l.id || l.name)}
+                  className={`filter-pill ${String(selectedLabel) === String(l.id ?? l.name) ? 'active' : ''}`}
+                  onClick={() => handleSelectLabel(l.id ?? l.name)}
+                  aria-pressed={String(selectedLabel) === String(l.id ?? l.name)}
                 >
                   {l.name}
                 </button>

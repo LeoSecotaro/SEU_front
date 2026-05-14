@@ -6,6 +6,7 @@ import './courseDetails.css'
 import CourseHero from '../components/CourseDetails/CourseHero'
 import CourseSidebar from '../components/CourseDetails/CourseSidebar'
 import CourseContent from '../components/CourseDetails/CourseContent'
+import Chatbot from '../components/Chatbot/Chatbot'
 
 export default function CourseDetails() {
   const { id } = useParams()
@@ -30,6 +31,8 @@ export default function CourseDetails() {
           <CourseSidebar course={course} />
         </div>
       </div>
+      
+      <Chatbot courseId={id} />
     </div>
   )
 }

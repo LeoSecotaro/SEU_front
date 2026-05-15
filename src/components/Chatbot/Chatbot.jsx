@@ -34,7 +34,7 @@ export default function Chatbot({ courseId }) {
   const generateSummary = async () => {
     try {
       setIsLoading(true);
-      await apiPost(`/api/v1/courses/${courseId}/generate_summary?sync=true`, {}, { includeCredentials: true });
+      await generateCourseSummary(courseId);
       setSummaryGenerated(true);
       setMessages([{ role: 'assistant', content: '¡Hola! Soy el asistente de este curso. ¿En qué te puedo ayudar?' }]);
     } catch (error) {
@@ -55,8 +55,8 @@ export default function Chatbot({ courseId }) {
     setIsLoading(true);
 
     try {
-      const response = await apiPost(`/api/v1/courses/${courseId}/chat`, { query: userMessage.content }, { includeCredentials: true });
-      setMessages((prev) => [...prev, { role: 'assistant', content: response.response || 'No response' }]);
+      const res = await sendCourseChat(courseId, userMessage.content);
+      setMessages((prev) => [...prev, { role: 'assistant', content: res.response || 'No response' }]);
     } catch (error) {
       console.error('Chat error:', error);
       setMessages((prev) => [...prev, { role: 'assistant', content: 'Lo siento, hubo un error al procesar tu mensaje.' }]);

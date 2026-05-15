@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Chatbot.css';
-import { apiPost } from '../../api/client';
-import { FaRegComment, FaTimes } from 'react-icons/fa';
+import { generateCourseSummary, sendCourseChat, deleteCurrentChatSession } from '../../api/chat';
+import ConfirmModal from '../ConfirmModal/ConfirmModal';
+import { FaRegComment, FaTimes, FaTrash } from 'react-icons/fa';
 
 export default function Chatbot({ courseId }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,6 +12,7 @@ export default function Chatbot({ courseId }) {
   const [hasUnread, setHasUnread] = useState(true);
   const messagesEndRef = useRef(null);
   const [summaryGenerated, setSummaryGenerated] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
   
   useEffect(() => {
     if (isOpen) {
@@ -63,6 +65,27 @@ export default function Chatbot({ courseId }) {
     }
   };
 
+  const handleDeleteSession = async () => {
+    setShowConfirm(true);
+  };
+
+  const confirmDelete = async () => {
+    setShowConfirm(false);
+    try {
+      setIsLoading(true);
+      await deleteCurrentChatSession();
+      setMessages([{ role: 'assistant', content: 'La sesión fue reiniciada.' }]);
+      setSummaryGenerated(false);
+    } catch (error) {
+      console.error('Error deleting chat session:', error);
+      setMessages((prev) => [...prev, { role: 'assistant', content: 'No se pudo reiniciar la sesión. Intenta de nuevo.' }]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const cancelDelete = () => setShowConfirm(false);
+
   return (
     <div className="chatbot-container">
       <button className="chatbot-toggle" onClick={() => setIsOpen(!isOpen)}>
@@ -73,8 +96,8 @@ export default function Chatbot({ courseId }) {
       <div className={`chatbot-window ${isOpen ? 'open' : 'closed'}`}>
         <div className="chatbot-header">
           <h3>Asistente del Curso</h3>
-          <button className="chatbot-close" onClick={() => setIsOpen(false)}>
-            <FaTimes />
+          <button className="chatbot-delete" onClick={handleDeleteSession} title="Reiniciar sesión del asistente">
+            <FaTrash />
           </button>
         </div>
         
@@ -107,6 +130,15 @@ export default function Chatbot({ courseId }) {
           </button>
         </form>
       </div>
+      <ConfirmModal
+        isOpen={showConfirm}
+        title="Reiniciar sesión del asistente"
+        message="¿Deseas reiniciar la sesión del asistente? Se borrarán los mensajes actuales."
+        onConfirm={confirmDelete}
+        onCancel={cancelDelete}
+        confirmLabel="Reiniciar"
+        cancelLabel="Cancelar"
+      />
     </div>
   );
 }

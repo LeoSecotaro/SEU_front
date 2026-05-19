@@ -40,11 +40,7 @@ export default function Footer() {
 
       <div className="footer-bottom">
         <div className="footer-bottom-inner">
-          <div className="copyright">© {new Date().getFullYear()} UTN Facultad Regional Mendoza. Todos los derechos reservados.</div>
-          <div className="legal-links">
-            <a href="#">Términos y Condiciones</a>
-            <a href="#">Políticas de Privacidad</a>
-          </div>
+          <div className="copyright" style={{ textAlign: 'center', width: '100%' }}>© {new Date().getFullYear()} UTN Facultad Regional Mendoza. Todos los derechos reservados.</div>
         </div>
       </div>
     </footer>

@@ -5,6 +5,7 @@ import { FiMenu } from 'react-icons/fi'
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar'
 import './AdminLayout.css'
 import { toast } from 'react-toastify'
+import { signOut } from '../../api/session'
 
 export default function AdminLayout() {
   const navigate = useNavigate()
@@ -46,32 +47,8 @@ export default function AdminLayout() {
 
   const handleLogout = async () => {
     try {
-      // perform sign out on backend (Devise) using DELETE
-      const csrf = (typeof document !== 'undefined' && document.querySelector('meta[name="csrf-token"]')) ? document.querySelector('meta[name="csrf-token"]').getAttribute('content') : null
-      let res = await fetch('/api/users/sign_out', {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          ...(csrf ? { 'X-CSRF-Token': csrf } : {})
-        }
-      })
-
-      // If dev server isn't proxying /api, it may return 404 — try backend absolute URL as fallback
-      if (res.status === 404) {
-        try {
-          res = await fetch('http://localhost:3000/users/sign_out', {
-            method: 'DELETE',
-            credentials: 'include',
-            headers: {
-              'Accept': 'application/json',
-              ...(csrf ? { 'X-CSRF-Token': csrf } : {})
-            }
-          })
-        } catch (e) {
-          console.error('Fallback sign out failed', e)
-        }
-      }
+      // perform sign out using centralized API helper which handles proxy/fallback
+      const res = await signOut()
 
       if (res && (res.ok || res.status === 204)) {
         toast.success('Sesión cerrada')

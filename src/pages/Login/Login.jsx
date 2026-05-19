@@ -27,10 +27,7 @@ export default function Login() {
 
     try {
       const csrfToken = getCsrfToken()
-      // Devise está montado en la raíz (/users/sign_in). Usar la ruta correcta.
-      // Si tu API corre en otro puerto (ej. Rails en 3000) y el frontend en otro, puedes usar:
-      // const URL = process.env.REACT_APP_API_URL || 'http://localhost:3000'
-      // const res = await fetch(`${URL}/users/sign_in`, {
+    
       const res = await fetch('/users/sign_in', {
         method: 'POST',
         credentials: 'include', // enviar cookies para que Rails cree la sesión
@@ -57,7 +54,7 @@ export default function Login() {
       }
 
       // login ok
-      // en Rails puede devolver datos del usuario; aquí simplemente navegamos
+      // en Rails puede devolver datos del usuario.
       setLoading(false)
       navigate('/admin')
     } catch (err) {
@@ -137,7 +134,7 @@ export default function Login() {
 }
 
 function FiGraduationCap({ className }) {
-  // SVG for graduation cap to match design precisely
+ 
   return (
     <svg 
       className={className} 

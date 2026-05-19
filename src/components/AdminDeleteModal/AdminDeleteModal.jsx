@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { FiX, FiTrash2 } from 'react-icons/fi'
 import '../AdminCourseModal/AdminCourseModal.css'
+import { deleteResource } from '../../api/resources'
 
 export default function AdminDeleteModal({ id, title, basePath = '/api/admin/labels', itemName = 'Elemento', onClose, onDeleted }) {
   const [submitting, setSubmitting] = useState(false)
@@ -10,33 +11,13 @@ export default function AdminDeleteModal({ id, title, basePath = '/api/admin/lab
     setSubmitting(true)
     setError(null)
     try {
-      let res = await fetch(`${basePath}/${id}`, {
-        method: 'DELETE',
-        credentials: 'include',
-        headers: { 'Accept': 'application/json' }
-      })
-      if (res.status === 404) {
-        // fallback to backend absolute URL (strip /api prefix if present)
-        const fallbackBase = basePath.startsWith('/api') ? basePath.replace('/api', '') : basePath
-        res = await fetch(`http://localhost:3000${fallbackBase}/${id}`, {
-          method: 'DELETE',
-          credentials: 'include',
-          headers: { 'Accept': 'application/json' }
-        })
-      }
-
-      if (res.ok || res.status === 204) {
-        onDeleted && onDeleted()
-        onClose && onClose()
-        return
-      }
-
-      let payload = null
-      try { payload = await res.json() } catch (e) { payload = null }
-      setError(payload && (payload.error || payload.message) ? String(payload.error || payload.message) : `Error al eliminar (status ${res.status})`)
+      await deleteResource(basePath, id)
+      onDeleted && onDeleted()
+      onClose && onClose()
+      return
     } catch (err) {
       console.error('Delete error', err)
-      setError('Error de red al intentar eliminar')
+      setError(err && err.message ? String(err.message) : 'Error de red al intentar eliminar')
     } finally {
       setSubmitting(false)
     }

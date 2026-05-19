@@ -51,7 +51,6 @@ export default function AdminUsers() {
           {users.map(u => (
             <div key={u.id} className="user-row">
               <div className="user-email">{u.email}</div>
-              <div className="user-admin">{u.admin ? 'Sí' : 'No'}</div>
               <div className="user-actions">
                 <button className="btn-icon" onClick={() => setEditingUserId(u.id)} title="Editar"><FiEdit2 /></button>
                 <button className="btn-icon danger" onClick={() => setDeletingUser({ id: u.id, email: u.email })} title="Eliminar"><FiTrash2 /></button>

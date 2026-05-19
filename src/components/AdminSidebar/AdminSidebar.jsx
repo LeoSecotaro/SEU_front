@@ -1,6 +1,6 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
-import { FiBook, FiTag, FiMonitor, FiClock, FiSettings, FiLogOut, FiX } from 'react-icons/fi'
+import { FiBook, FiTag, FiMonitor, FiClock, FiSettings, FiLogOut, FiX, FiUsers } from 'react-icons/fi'
 import './AdminSidebar.css'
 
 export default function AdminSidebar({ onLogout, mobileOpen = false, onClose = () => {} }) {
@@ -61,6 +61,15 @@ export default function AdminSidebar({ onLogout, mobileOpen = false, onClose = (
               <div className="nav-text">
                 <span className="nav-title">Días</span>
                 <span className="nav-desc">Plantillas de días</span>
+              </div>
+            </NavLink>
+          </li>
+          <li>
+            <NavLink to="/admin/users" className={({isActive}) => isActive ? "nav-item active" : "nav-item"} onClick={handleClickLink}>
+              <FiUsers className="nav-icon" />
+              <div className="nav-text">
+                <span className="nav-title">Usuarios</span>
+                <span className="nav-desc">Administrar cuentas</span>
               </div>
             </NavLink>
           </li>

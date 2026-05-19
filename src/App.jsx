@@ -13,6 +13,7 @@ import AdminCourses from './pages/Admin/AdminCourses'
 import AdminLabels from './pages/Admin/AdminLabels'
 import AdminModalities from './pages/Admin/AdminModalities'
 import AdminSchedules from './pages/Admin/AdminSchedules'
+import AdminUsers from './pages/Admin/AdminUsers'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
@@ -64,6 +65,7 @@ function App() {
             <Route path="labels" element={<AdminLabels />} />
             <Route path="modalities" element={<AdminModalities />} />
             <Route path="schedules" element={<AdminSchedules />} />
+            <Route path="users" element={<AdminUsers />} />
           </Route>
         </Routes>
       </BrowserRouter>

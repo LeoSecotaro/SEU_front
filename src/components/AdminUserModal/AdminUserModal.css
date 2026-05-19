@@ -1,0 +1,4 @@
+.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.35);display:flex;align-items:center;justify-content:center;z-index:1200}.modal{width:520px;max-width:calc(100% - 32px);background:#fff;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,0.12);overflow:hidden}.modal-header{background:#0f1920;color:#fff;padding:12px 16px}.modal-body{padding:16px;display:flex;flex-direction:column;gap:8px}.modal-body label{font-weight:600}.modal-body input[type=text],.modal-body input[type=password]{padding:10px;border-radius:8px;border:1px solid #ddd}.modal-actions{display:flex;gap:8px;justify-content:flex-end;padding:12px;background:#fafafa}
+.btn{padding:8px 12px;border-radius:8px;border:none;cursor:pointer}
+.btn-primary{background:#f39c12;color:#fff}
+.btn-cancel{background:#efefef}

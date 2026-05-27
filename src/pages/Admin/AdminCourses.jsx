@@ -73,6 +73,9 @@ export default function AdminCourses() {
         const minQuota = c.quota ?? c.minQuota ?? c.min_quota ?? null
 
         const description = c.description || c.short_description || ''
+        // truncate description for admin list display to keep cards compact
+        const maxDesc = 320
+        const shortDescription = description && description.length > maxDesc ? description.slice(0, maxDesc).trim() + '...' : description
 
         const topics = Array.isArray(c.course_topics) ? c.course_topics : (Array.isArray(c.topics) ? c.topics : [])
 
@@ -85,7 +88,7 @@ export default function AdminCourses() {
           start: startLabel,
           category,
           modality,
-          description,
+          description: shortDescription,
           topics,
           raw: c
         }

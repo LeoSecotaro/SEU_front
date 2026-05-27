@@ -32,15 +32,46 @@
   margin-left: 0 !important;
 }
 
-.course-hero .badge { 
-  background: #ffb300; 
-  color: #000; 
-  display: inline-block; 
-  padding: 6px 14px; 
-  border-radius: 999px; 
-  margin-bottom: 16px; 
-  font-weight: 700;
-  font-size: 14px;
+/* Ensure large titles wrap cleanly and don't overlap themselves */
+.course-hero h1 {
+  /* responsive sizing to avoid extremely large line stacking */
+  font-size: clamp(28px, 6.5vw, 64px) !important;
+  line-height: 1.06 !important; /* enough spacing between lines */
+  margin: 12px 0 !important;
+  word-break: break-word !important;
+  white-space: normal !important;
+  hyphens: auto !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  max-width: 100% !important;
+  display: block !important;
+  z-index: 2;
+}
+
+.course-hero .lead {
+  max-width: 100% !important;
+  color: rgba(255,255,255,0.9) !important;
+  margin-top: 12px !important;
+  line-height: 1.6 !important;
+}
+
+.course-goals {
+  white-space: pre-wrap; /* preserve newlines and spacing */
+  line-height: 1.8;
+  color: #0f172a;
+}
+
+.course-goals p { margin: 0 0 12px 0 }
+
+/* Small screens: reduce title size further to avoid overlap */
+@media (max-width: 600px) {
+  .course-hero {
+    padding: 40px 16px 80px !important;
+  }
+  .course-hero h1 {
+    font-size: clamp(22px, 8vw, 40px) !important;
+    line-height: 1.12 !important;
+  }
 }
 
 /* =========================================
@@ -245,9 +276,12 @@
   color: #64748b; 
   font-size: 14px; 
   line-height: 1.6; 
+  /* preserve newlines and spacing inside topic content */
+  white-space: pre-wrap !important;
+  word-break: break-word;
 }
 .topic-body-inner p {
-  margin: 0;
+  margin: 0 0 12px 0;
 }
 
 /* =========================================

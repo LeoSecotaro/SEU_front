@@ -1,80 +1,44 @@
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState } from 'react'
 import './courses.css'
 import { FaLayerGroup } from 'react-icons/fa'
 import CourseCard from '../CourseCard/CourseCard'
+import { listCourses, listLabels } from '../../api/courses'
 
 export default function CoursesList() {
   const [courses, setCourses] = useState([])
   const [labels, setLabels] = useState([])
   const [selectedLabel, setSelectedLabel] = useState('')
   const [loading, setLoading] = useState(false)
-  const [loadingLabels, setLoadingLabels] = useState(false)
   const [error, setError] = useState(null)
 
-  const fetchCourses = useCallback(async (labelId = '') => {
+  useEffect(() => {
+    listLabels()
+      .then(data => {
+        const arr = Array.isArray(data) ? data : (data.data || data || [])
+        setLabels(arr)
+      })
+      .catch(e => console.error('Error cargando etiquetas', e))
+  }, [])
+
+
+  useEffect(() => {
     setLoading(true)
     setError(null)
-    try {
-      const params = new URLSearchParams({ per_page: 9 })
-      if (labelId) params.append('label_ids[]', labelId)
-      const res = await fetch(`/api/v1/courses?${params.toString()}`)
-      if (!res.ok) throw new Error('Error fetching courses')
-      const json = await res.json()
-      setCourses(json.data || json || [])
-    } catch (e) {
-      // fallback: try /api/courses (no v1)
-      try {
-        const params = new URLSearchParams({ per_page: 9 })
-        if (labelId) params.append('label_ids[]', labelId)
-        const res2 = await fetch(`/api/courses?${params.toString()}`)
-        if (!res2.ok) throw e
-        const j2 = await res2.json()
-        setCourses(j2.data || j2 || [])
-      } catch (err) {
-        setError(err)
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [])
+    
+    listCourses({ per_page: 9, label_ids: selectedLabel ? [selectedLabel] : undefined })
+      .then(data => {
+        const arr = Array.isArray(data) ? data : (data.data || data || [])
+        setCourses(arr)
+      })
+      .catch(e => {
+        console.error('listCourses error', e)
+        setError(e)
+      })
+      .finally(() => setLoading(false))
+  }, [selectedLabel]) 
 
-  const fetchLabels = useCallback(async () => {
-    setLoadingLabels(true)
-    try {
-      const res = await fetch('/api/v1/labels')
-      if (res.ok) {
-        const json = await res.json()
-        setLabels(json.data || json || [])
-        return
-      }
-      // fallback
-      const res2 = await fetch('/api/labels')
-      if (res2.ok) {
-        const j2 = await res2.json()
-        setLabels(j2.data || j2 || [])
-      }
-    } catch (e) {
-      // ignore labels error, leave empty
-    } finally {
-      setLoadingLabels(false)
-    }
-  }, [])
-
-  useEffect(() => {
-    fetchLabels()
-    fetchCourses()
-  }, [fetchCourses, fetchLabels])
-
-  useEffect(() => {
-    // refetch when label changes
-    // keep effect for cases where selectedLabel is changed elsewhere, but prefer direct fetch from handler
-    fetchCourses(selectedLabel)
-  }, [selectedLabel, fetchCourses])
-
-  // immediate handler for filter clicks to avoid timing issues
   const handleSelectLabel = (labelId) => {
     setSelectedLabel(labelId)
-    fetchCourses(labelId)
   }
 
   if (loading) return <div className="courses-grid">Cargando...</div>
@@ -85,7 +49,7 @@ export default function CoursesList() {
       <div className="courses-inner">
         <header className="courses-header">
           <div className="header-left">
-            <div className="catalog-icon" aria-hidden>
+            <div className="catalog-icon" aria-hidden="true">
               <FaLayerGroup />
             </div>
             <div>

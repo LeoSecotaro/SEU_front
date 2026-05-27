@@ -21,3 +21,18 @@ export function getCourse(id) {
   if (!id) return Promise.reject(new Error('missing course id'))
   return apiGet(`/api/v1/courses/${id}`)
 }
+
+export async function listLabels() {
+  try {
+    const res = await apiGet('/api/v1/labels')
+    return res
+  } catch (e) {
+    // fallback to non-v1 path
+    try {
+      const res2 = await apiGet('/api/labels')
+      return res2
+    } catch (e2) {
+      throw e
+    }
+  }
+}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { updateAdminUser } from '../../api/users'
-import { apiGet } from '../../api/client'
+import { updateAdminUser, getAdminUser } from '../../api/users'
 import '../Modal/Modal.css'
 import Modal from '../Modal/Modal'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
@@ -15,7 +14,7 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated }) {
 
   useEffect(() => {
     let mounted = true
-    apiGet(`/api/admin/users/${userId}`, { includeCredentials: true }).then(data => {
+    getAdminUser(userId).then(data => {
       if (!mounted) return
       setEmail(data.email || '')
       setLoading(false)

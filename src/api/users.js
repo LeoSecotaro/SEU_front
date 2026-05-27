@@ -4,6 +4,11 @@ export function listAdminUsers() {
   return apiGet('/api/admin/users', { includeCredentials: true })
 }
 
+export function getAdminUser(id) {
+  if (!id) return Promise.reject(new Error('missing user id'))
+  return apiGet(`/api/admin/users/${id}`, { includeCredentials: true })
+}
+
 export function createAdminUser(payload) {
   // payload: { email, password, password_confirmation, admin }
   return apiPost('/api/admin/users', { user: payload }, { includeCredentials: true })

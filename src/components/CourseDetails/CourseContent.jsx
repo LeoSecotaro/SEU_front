@@ -30,7 +30,7 @@ export default function CourseContent({ course }) {
 
       <section className="course-objectives">
         <h3>Objetivos del Curso</h3>
-        <div>{course.goals}</div>
+        <div className="course-goals">{course.goals}</div>
       </section>
 
       <section className="course-topics">

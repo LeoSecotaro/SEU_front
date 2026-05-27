@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './AdminCourseModal.css';
+import { fetchAdminOptions, createAdminCourse } from '../../api/admin'
 
 export default function AdminCourseModal({ onClose, onCourseCreated }) {
   const [formData, setFormData] = useState({
@@ -53,35 +54,21 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
 
     const fetchOptions = async () => {
       try {
-        const [modesRes, daysRes, labelsRes] = await Promise.all([
-          fetch('/api/admin/modes'),
-          fetch('/api/admin/days'),
-          fetch('/api/admin/labels')
-        ]);
-
-        if (modesRes.ok) {
-          const json = await modesRes.json();
-          setModes(normalizeIds(parseList(json)));
-        }
-        if (daysRes.ok) {
-          const json = await daysRes.json();
-          setDays(normalizeIds(parseList(json)));
-        }
-        if (labelsRes.ok) {
-          const json = await labelsRes.json();
-          setLabels(normalizeIds(parseList(json)));
-        }
+        const { modes: m, days: d, labels: l } = await fetchAdminOptions()
+        setModes(normalizeIds(parseList(m)))
+        setDays(normalizeIds(parseList(d)))
+        setLabels(normalizeIds(parseList(l)))
       } catch (error) {
-        console.error('Error fetching form options:', error);
-        setModes([]);
-        setDays([]);
-        setLabels([]);
+        console.error('Error fetching form options:', error)
+        setModes([])
+        setDays([])
+        setLabels([])
       } finally {
-        setLoadingOptions(false);
+        setLoadingOptions(false)
       }
-    };
+    }
 
-    fetchOptions();
+    fetchOptions()
   }, []);
 
   const handleChange = (e) => {
@@ -206,38 +193,14 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
     };
 
     try {
-      let response;
-      if (imageFile) {
-        // send multipart/form-data with a JSON payload and the image file
-        const fd = new FormData();
-        fd.append('course', JSON.stringify(payload.course));
-        fd.append('image', imageFile);
-        response = await fetch('/api/admin/courses', {
-          method: 'POST',
-          body: fd
-        });
-      } else {
-        // include image_url if provided
-        if (formData.image_url) payload.course.image_url = formData.image_url
-        response = await fetch('/api/admin/courses', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        });
-      }
-
-      if (response.ok) {
-        const newCourse = await response.json();
-        onCourseCreated(newCourse);
-        onClose();
-        // success toast handled by parent page to avoid duplicates
-      } else {
-        const errData = await response.json();
-        const errorMessage = translateBackendErrors(errData);
-        toast.error(errorMessage);
-        console.error('Validation errors:', errData);
+      try {
+        const created = await createAdminCourse(payload.course, imageFile)
+        onCourseCreated(created)
+        onClose()
+      } catch (err) {
+        console.error('Submission error:', err)
+        const errorMessage = translateBackendErrors(err)
+        toast.error(errorMessage)
       }
     } catch (error) {
       console.error('Submission error:', error);
@@ -291,7 +254,7 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
     <div className="modal-overlay">
       <div className="modal-content admin-course-modal">
         <div className="modal-header">
-          <h2>Crear Nuevo Curso</h2>
+          <h2>Crear Curso</h2>
           <button className="close-btn" onClick={onClose}><FiX /></button>
         </div>
 

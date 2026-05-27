@@ -3,6 +3,7 @@ import { FiX, FiPlus, FiTrash2 } from 'react-icons/fi'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import '../AdminCourseModal/AdminCourseModal.css'
+import { fetchAdminOptions, getAdminCourse, updateAdminCourse } from '../../api/admin'
 
 export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdated }) {
   const [formData, setFormData] = useState({
@@ -50,14 +51,10 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
 
     const fetchOptions = async () => {
       try {
-        const [modesRes, daysRes, labelsRes] = await Promise.all([
-          fetch('/api/admin/modes'),
-          fetch('/api/admin/days'),
-          fetch('/api/admin/labels')
-        ])
-        if (modesRes.ok) setModes(normalizeIds(parseList(await modesRes.json())))
-        if (daysRes.ok) setDays(normalizeIds(parseList(await daysRes.json())))
-        if (labelsRes.ok) setLabels(normalizeIds(parseList(await labelsRes.json())))
+        const { modes: m, days: d, labels: l } = await fetchAdminOptions()
+        setModes(normalizeIds(parseList(m)))
+        setDays(normalizeIds(parseList(d)))
+        setLabels(normalizeIds(parseList(l)))
       } catch (err) {
         console.error('Error fetching options', err)
         setModes([])
@@ -91,13 +88,7 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     const fetchCourse = async () => {
       setLoadingCourse(true)
       try {
-        // try proxied admin route first
-        let res = await fetch(`/api/admin/courses/${courseId}`)
-        if (res.status === 404) {
-          res = await fetch(`http://localhost:3000/admin/courses/${courseId}`)
-        }
-        if (!res.ok) throw new Error('Error fetching course')
-        const c = await res.json()
+        const c = await getAdminCourse(courseId)
         // map backend shape to formData fields
         const dayIds = Array.isArray(c.course_days) && c.course_days.length
           ? c.course_days.map(cd => Number(cd.day_id))
@@ -259,30 +250,13 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     }
 
     try {
-      let res
-      if (imageFile) {
-        const fd = new FormData()
-        fd.append('course', JSON.stringify(payload.course))
-        fd.append('image', imageFile)
-        res = await fetch(`/api/admin/courses/${courseId}`, { method: 'PATCH', body: fd })
-      } else {
-        if (formData.image_url) payload.course.image_url = formData.image_url
-        res = await fetch(`/api/admin/courses/${courseId}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-      }
-      if (res.ok) {
-        const updated = await res.json()
-        onCourseUpdated && onCourseUpdated(updated)
-        onClose()
-        // success toast handled by parent page
-      } else {
-        const err = await res.json()
-        const message = translateBackendErrors(err)
-        toast.error(message)
-        console.error('Validation errors:', err);
-      }
+      const updated = await updateAdminCourse(courseId, payload.course, imageFile)
+      onCourseUpdated && onCourseUpdated(updated)
+      onClose()
     } catch (err) {
-      console.error('Submission error:', err);
-      toast.error('Error de red al actualizar el curso');
+      console.error('Submission error:', err)
+      const message = translateBackendErrors(err)
+      toast.error(message)
     } finally {
       setSubmitting(false)
     }

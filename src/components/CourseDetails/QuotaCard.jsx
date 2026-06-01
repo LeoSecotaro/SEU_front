@@ -2,7 +2,7 @@ import React from 'react'
 import './coursedetails.css'
 import { FaUsers, FaCheckCircle } from 'react-icons/fa'
 
-export default function QuotaCard({ quota, enrolled }) {
+export default function QuotaCard({ quota, enrolled, minQuota }) {
   const percent = (quota && enrolled) ? Math.min(100, Math.round((enrolled / quota) * 100)) : 0
 
   return (
@@ -13,7 +13,12 @@ export default function QuotaCard({ quota, enrolled }) {
         <div className="info-card-line">
           <span className="line-icon users"><FaUsers /></span>
           <span className="line-text">
-            {quota ? <strong>{quota} <span className="muted">cupos</span></strong> : <span className="muted">Cupo no especificado</span>}
+            {(quota !== undefined && quota !== null) ? (
+              <span className="quota-max">Cupo máximo: <strong>{quota}</strong> <span className="muted">cupos</span></span>
+            ) : (
+              <span className="muted">Cupo no especificado</span>
+            )}
+            {(minQuota !== undefined && minQuota !== null) ? <span className="min-quota">Cupo mínimo: <strong>{minQuota}</strong></span> : null}
           </span>
         </div>
 

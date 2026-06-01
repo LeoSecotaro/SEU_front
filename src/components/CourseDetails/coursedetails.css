@@ -336,13 +336,12 @@
   font-size: 14px; 
 }
 
-.line-text strong {
-  font-weight: 600;
-}
-
-.muted { 
-  color: #64748b; 
-  font-weight: normal; 
+/* Cupo mínimo: place it on its own line and match main text color */
+.min-quota {
+  display: block;
+  margin-top: 6px;
+  color: #0f172a; /* same color as .line-text */
+  font-size: 14px;
 }
 
 /* Barra de progreso de cupos */

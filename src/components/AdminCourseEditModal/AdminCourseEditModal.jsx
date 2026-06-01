@@ -13,6 +13,7 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     start_date: '',
     mode_id: '',
     quota: '',
+    min_quota: '',
     email: '',
     phone_number: '',
     address: '',
@@ -88,7 +89,21 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
     const fetchCourse = async () => {
       setLoadingCourse(true)
       try {
-        const c = await getAdminCourse(courseId)
+        const raw = await getAdminCourse(courseId)
+        console.log('getAdminCourse raw response:', raw)
+        // normalize response envelopes (resp.course, resp.data, resp.attributes)
+        const normalizeResp = (r) => {
+          if (!r) return r
+          if (r.course) return r.course
+          if (r.data) return r.data
+          if (r.attributes) return r.attributes
+          // handle nested data: { data: { attributes: {...} } }
+          if (r.data && r.data.attributes) return r.data.attributes
+          if (r.data && r.data.data) return normalizeResp(r.data.data)
+          return r
+        }
+        const c = normalizeResp(raw)
+        console.log('normalized course for edit modal:', c)
         // map backend shape to formData fields
         const dayIds = Array.isArray(c.course_days) && c.course_days.length
           ? c.course_days.map(cd => Number(cd.day_id))
@@ -107,20 +122,21 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
 
         setFormData({
           name: c.name || c.title || '',
-          description: c.description || '',
-          goals: c.goals || '',
+          description: c.description || c.short_description || c.summary || c.body || '',
+          goals: c.goals || c.objectives || c.goal || '',
           start_date: c.start_date || '',
           mode_id: c.mode_id || (c.mode && c.mode.id) || '',
           quota: c.quota ?? c.capacity ?? '',
+          min_quota: c.min_quota ?? c.minQuota ?? c.quota_min ?? c.minimum_quota ?? c.minimumQuota ?? '',
           email: c.email || '',
-          phone_number: c.phone_number || '',
-          address: c.address || c.location || '',
-          duration: c.duration || '',
-          hourly_load: c.hourly_load || c.hours || '',
+          phone_number: c.phone_number || c.phone || '',
+          address: c.address || c.location || c.venue || '',
+          duration: c.duration || c.duration_text || c.hours_description || '',
+          hourly_load: c.hourly_load || c.hours || c.hourly || '',
           day_ids: dayIds,
           label_ids: labelIds,
-          price: c.price != null ? String(c.price) : '',
-          price_is_monthly: !!c.price_is_monthly,
+          price: (c.price != null) ? String(c.price) : (c.price_cents ? String(c.price_cents / 100) : (c.cost != null ? String(c.cost) : '')),
+          price_is_monthly: !!(c.price_is_monthly ?? c.price_monthly ?? (c.price_period === 'monthly')),
           course_topics_attributes: topics,
           course_days_attributes: courseDaysAttrs,
           image_url: c.image_url || ''
@@ -236,6 +252,8 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
         start_date: formData.start_date || null,
         mode_id: formData.mode_id ? Number(formData.mode_id) : null,
         quota: formData.quota ? Number(formData.quota) : null,
+        min_quota: formData.min_quota ? Number(formData.min_quota) : null,
+        minQuota: formData.min_quota ? Number(formData.min_quota) : null,
         email: formData.email,
         phone_number: formData.phone_number,
         address: formData.address,
@@ -293,7 +311,7 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
 
     if (errData.error) return mapMessage(errData.error);
     return JSON.stringify(errData);
-  };
+  }
 
   if (loadingOptions || loadingCourse) return (
     <div className="modal-overlay"><div className="modal-content admin-course-modal"><div className="modal-body">Cargando...</div></div></div>
@@ -353,6 +371,19 @@ export default function AdminCourseEditModal({ courseId, onClose, onCourseUpdate
                     <input type="checkbox" name="price_is_monthly" checked={!!formData.price_is_monthly} onChange={handleChange} />
                     <span>Precio mensual</span>
                   </label>
+                </div>
+              </div>
+
+              <div className="form-row">
+                <div className="form-group">
+                  <label>Cupo mínimo</label>
+                  <input type="number" name="min_quota" value={formData.min_quota} onChange={handleChange} />
+                </div>
+
+                <div className="form-group">
+                  {/* placeholder column to keep layout balanced */}
+                  <label style={{ visibility: 'hidden' }}>placeholder</label>
+                  <div />
                 </div>
               </div>
 

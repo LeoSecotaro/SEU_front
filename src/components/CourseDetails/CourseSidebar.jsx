@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './coursedetails.css'
 import ContactCard from './ContactCard'
+import InscriptionModal from '../InscriptionModal/InscriptionModal'
 
 export default function CourseSidebar({ course }) {
+  const [inscriptionOpen, setInscriptionOpen] = useState(false)
+
   // Determine base price string
   let basePrice = 'Consultar precio'
   if (course) {
@@ -26,11 +29,12 @@ export default function CourseSidebar({ course }) {
         <div className="price-header">INVERSIÓN</div>
         <div className="price-amount">{priceText}</div>
         <div className="price-actions">
-          <button className="btn primary large">Inscribirme Ahora</button>
+          <button className="btn primary large" onClick={() => setInscriptionOpen(true)}>Inscribirme Ahora</button>
         </div>
       </div>
 
       <ContactCard course={course} />
+      <InscriptionModal isOpen={inscriptionOpen} onClose={() => setInscriptionOpen(false)} course={course} />
     </aside>
   )
 }

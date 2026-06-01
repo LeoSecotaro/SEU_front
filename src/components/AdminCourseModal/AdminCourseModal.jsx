@@ -14,6 +14,7 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
     start_date: '',
     mode_id: '',
     quota: '',
+    min_quota: '',
     email: '',
     phone_number: '',
     address: '',
@@ -179,6 +180,8 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
         start_date: formData.start_date || null,
         mode_id: formData.mode_id ? Number(formData.mode_id) : null,
         quota: formData.quota ? Number(formData.quota) : null,
+        min_quota: formData.min_quota ? Number(formData.min_quota) : null,
+        minQuota: formData.min_quota ? Number(formData.min_quota) : null,
         email: formData.email,
         phone_number: formData.phone_number,
         address: formData.address,
@@ -307,6 +310,19 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
                       <input type="checkbox" name="price_is_monthly" checked={!!formData.price_is_monthly} onChange={handleChange} />
                       <span>Precio mensual</span>
                     </label>
+                  </div>
+                </div>
+
+                <div className="form-row">
+                  <div className="form-group">
+                    <label>Cupo mínimo</label>
+                    <input type="number" name="min_quota" value={formData.min_quota} onChange={handleChange} />
+                  </div>
+
+                  <div className="form-group">
+                    {/* placeholder column to keep layout balanced */}
+                    <label style={{ visibility: 'hidden' }}>placeholder</label>
+                    <div />
                   </div>
                 </div>
 

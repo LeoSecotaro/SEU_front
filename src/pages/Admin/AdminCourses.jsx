@@ -70,7 +70,9 @@ export default function AdminCourses() {
         // prefer explicit duration, otherwise use hourly_load and present in Spanish
         const duration = c.duration || (c.hourly_load ? `${c.hourly_load} horas` : '') || ''
 
-        const minQuota = c.quota ?? c.minQuota ?? c.min_quota ?? null
+        // canonical quota fields: expose both quota (max) and quota_minimum (min)
+        const quota = c.quota ?? c.quota_maximum ?? c.capacity ?? c.capacity_max ?? c.quota_max ?? null
+        const quota_minimum = c.quota_minimum ?? c.min_quota ?? c.quota_min ?? null
 
         const description = c.description || c.short_description || ''
         // truncate description for admin list display to keep cards compact
@@ -84,7 +86,9 @@ export default function AdminCourses() {
           title,
           price: priceNum,
           duration,
-          minQuota,
+          // provide canonical fields used by AdminCourseCard
+          quota,
+          quota_minimum,
           start: startLabel,
           category,
           modality,

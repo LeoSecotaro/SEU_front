@@ -53,7 +53,7 @@ export default function CourseCard({ course }) {
         </div>
 
         <div className="footer">
-          <div className="starts">INICIA <strong>{asText(course.start_date)}</strong></div>
+          <div className="starts">INICIA <strong>{course.start_date ? asText(course.start_date) : 'Inicio con el cupo mínimo'}</strong></div>
           <Link className="btn small" to={`/courses/${course.id}`}>Ver Detalles <FaArrowRight /></Link>
         </div>
       </div>

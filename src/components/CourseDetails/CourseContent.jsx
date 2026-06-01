@@ -37,7 +37,7 @@ export default function CourseContent({ course }) {
       <section className="course-meta-cards">
         <div className="meta-grid">
           <MetaCard Icon={FaMapMarkerAlt} title="Modalidad:" value={<strong>{modeLabel}</strong>} />
-          <MetaCard Icon={FaCalendarAlt} title="Inicio:" value={<strong>{course.start_date}</strong>} />
+          <MetaCard Icon={FaCalendarAlt} title="Inicio:" value={<strong>{course.start_date || 'Inicio con el cupo mínimo'}</strong>} />
           <MetaCard Icon={FaClock} title="Duración:" value={<strong>{duration}</strong>} />
           <MetaCard Icon={FaHourglassHalf} title="Carga Horaria:" value={<strong>{hourly}</strong>} />
         </div>

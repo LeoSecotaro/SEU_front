@@ -1,4 +1,3 @@
-// Small fetch-based API client used by other modules
 export const API_BASE = import.meta.env.VITE_API_BASE || '';
 
 async function handleResponse(res) {

@@ -17,25 +17,74 @@ export default function AdminCourseCard({ course, onEdit, onDelete }) {
     console.log('Eliminar', course.id)
   }
 
+  // Robust fallbacks for modality and category
+  const modality = (
+    course.modality ||
+    course.mode ||
+    course.mode_name ||
+    course.modality_name ||
+    (course.modality && (course.modality.name || course.modality.title)) ||
+    (course.mode && (course.mode.name || course.mode.title)) ||
+    null
+  )
+
+  const category = (
+    course.category ||
+    (course.label && (course.label.name || course.label.title)) ||
+    (course.category_name || course.label_name) ||
+    ''
+  )
+
+  // Normalize common display fields so cards work with different backend shapes
+  const title = course.title ?? course.name ?? course.course_name ?? ''
+  const description = course.description ?? course.summary ?? course.short_description ?? ''
+  const priceVal = course.price ?? course.cost ?? course.fee ?? null
+  const durationVal = course.duration ?? course.hours ?? course.duration_hours ?? null
+
+  const startRaw = course.start ?? course.start_date ?? course.start_at ?? null
+  const formatDate = (d) => {
+    if (!d) return null
+    if (typeof d === 'string') {
+      // prefer YYYY-MM-DD portion
+      return d.includes('T') ? d.split('T')[0] : d
+    }
+    return String(d)
+  }
+  const start = formatDate(startRaw)
+
+  // Support only canonical DB fields: quota (max) and quota_minimum (min)
+  const toNum = (v) => {
+    if (v === undefined || v === null) return null
+    const n = Number(v)
+    return Number.isNaN(n) ? null : n
+  }
+
+  // Use only canonical fields coming from the normalized object (or the raw payload if you intentionally populate them there)
+  const maxVal = toNum(course.quota ?? null)
+  const minVal = toNum(course.quota_minimum ?? null)
+
+  const formatQuota = (v) => (v === null || v === undefined ? '—' : String(v))
+
   return (
     <div className="admin-course-card">
       <div className="course-tags">
-        <span className="tag">{course.category}</span>
-        <span className="tag-outline">{course.modality}</span>
+        <span className="tag">{category}</span>
+        {modality ? <span className="tag-outline">{modality}</span> : null}
         <span className="course-id">ID #{course.id}</span>
       </div>
 
-      <h3>{course.title}</h3>
+      <h3>{title || '—'}</h3>
 
-      {course.description && (
-        <p className="course-desc">{course.description}</p>
+      {description && (
+        <p className="course-desc">{description}</p>
       )}
 
       <div className="course-meta">
-        <span>$ {course.price ? course.price.toLocaleString() : '—'} ARS</span>
-        <span>{course.duration}</span>
-        <span>Cupo mín: {course.minQuota ?? '—'}</span>
-        <span>Inicio: <strong>{course.start || '—'}</strong></span>
+        <span>$ {priceVal ? Number(priceVal).toLocaleString() : '—'} ARS</span>
+        <span>Duración en horas: {durationVal ?? '—'}</span>
+        <span>Cupo máx: {formatQuota(maxVal)}</span>
+        <span>Cupo mín: {formatQuota(minVal)}</span>
+        <span>Inicio: <strong>{start || '—'}</strong></span>
       </div>
 
       <div className="course-actions">

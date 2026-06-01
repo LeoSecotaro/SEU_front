@@ -21,7 +21,7 @@ function normalizeTimeString(t) {
 }
 
 function formatSchedule(schedule, days) {
-  // If days array provided, prefer showing days + per-day time (if available)
+  
   if (Array.isArray(days) && days.length > 0) {
     const parts = days.map(d => {
       const name = (d && (d.name || d.title || d.day_name || d.day)) || String(d)

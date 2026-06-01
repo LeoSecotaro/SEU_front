@@ -123,6 +123,13 @@
   gap: 16px;
   color: #64748b;
   font-size: 14px;
+  flex-wrap: wrap; /* allow items to wrap on small widths to avoid overlap */
+}
+
+.course-meta span {
+  white-space: nowrap; /* keep each piece together */
+  display: inline-block;
+  margin-right: 8px;
 }
 
 .course-actions {

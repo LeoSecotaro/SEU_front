@@ -3,7 +3,7 @@ import { FiX, FiTrash2 } from 'react-icons/fi'
 import '../AdminCourseModal/AdminCourseModal.css'
 import { deleteResource } from '../../api/resources'
 
-export default function AdminDeleteModal({ id, title, basePath = '/api/admin/labels', itemName = 'Elemento', onClose, onDeleted }) {
+export default function AdminDeleteModal({ id, title, basePath = '/admin/labels', itemName = 'Elemento', onClose, onDeleted }) {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState(null)
 

@@ -75,7 +75,7 @@ export default function AdminUsers() {
           onUpdated={onUserUpdated}
         />
       )}
-      {deletingUser && <AdminDeleteModal id={deletingUser.id} title={deletingUser.email} basePath={'/api/admin/users'} itemName={'Usuario'} onClose={() => setDeletingUser(null)} onDeleted={onUserDeleted} />}
+      {deletingUser && <AdminDeleteModal id={deletingUser.id} title={deletingUser.email} basePath={'/admin/users'} itemName={'Usuario'} onClose={() => setDeletingUser(null)} onDeleted={onUserDeleted} />}
     </div>
   )
 }

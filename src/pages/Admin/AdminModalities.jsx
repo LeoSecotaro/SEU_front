@@ -16,7 +16,7 @@ export default function AdminModalities() {
   const fetchModes = async () => {
     setLoading(true)
     try {
-      const data = await apiGet('/api/admin/modes', { includeCredentials: true })
+      const data = await apiGet('/admin/modes', { includeCredentials: true })
       const list = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : Object.values(data).flat())
       setModes(list.filter(Boolean))
     } catch (err) {
@@ -33,7 +33,7 @@ export default function AdminModalities() {
     const name = newName.trim()
     if (!name) return
     try {
-      await apiPost('/api/admin/modes', { mode: { name } }, { includeCredentials: true })
+      await apiPost('/admin/modes', { mode: { name } }, { includeCredentials: true })
       setNewName('')
       toast.success('Modalidad creada')
       fetchModes()
@@ -57,7 +57,7 @@ export default function AdminModalities() {
     const name = (editingName || '').trim()
     if (!name) return
     try {
-      await apiPut(`/api/admin/modes/${id}`, { mode: { name } }, { includeCredentials: true })
+      await apiPut(`/admin/modes/${id}`, { mode: { name } }, { includeCredentials: true })
       toast.success('Modalidad actualizada')
       cancelEdit()
       fetchModes()
@@ -118,7 +118,7 @@ export default function AdminModalities() {
       </div>
 
       {deletingMode && (
-        <AdminDeleteModal id={deletingMode.id} title={deletingMode.title} basePath={'/api/admin/modes'} itemName={'Modalidad'} onClose={() => setDeletingMode(null)} onDeleted={onDeleted} />
+        <AdminDeleteModal id={deletingMode.id} title={deletingMode.title} basePath={'/admin/modes'} itemName={'Modalidad'} onClose={() => setDeletingMode(null)} onDeleted={onDeleted} />
       )}
     </div>
   )

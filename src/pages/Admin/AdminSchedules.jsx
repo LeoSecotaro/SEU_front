@@ -16,7 +16,7 @@ export default function AdminSchedules() {
   const fetchDays = async () => {
     setLoading(true)
     try {
-      const data = await apiGet('/api/admin/days', { includeCredentials: true })
+      const data = await apiGet('/admin/days', { includeCredentials: true })
       const list = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : Object.values(data).flat())
       setDays(list.filter(Boolean))
     } catch (err) {
@@ -33,7 +33,7 @@ export default function AdminSchedules() {
     const name = newName.trim()
     if (!name) return
     try {
-      await apiPost('/api/admin/days', { day: { name } }, { includeCredentials: true })
+      await apiPost('/admin/days', { day: { name } }, { includeCredentials: true })
       setNewName('')
       toast.success('Día creado')
       fetchDays()
@@ -57,7 +57,7 @@ export default function AdminSchedules() {
     const name = (editingName || '').trim()
     if (!name) return
     try {
-      await apiPut(`/api/admin/days/${id}`, { day: { name } }, { includeCredentials: true })
+      await apiPut(`/admin/days/${id}`, { day: { name } }, { includeCredentials: true })
       toast.success('Día actualizado')
       cancelEdit()
       fetchDays()
@@ -118,7 +118,7 @@ export default function AdminSchedules() {
       </div>
 
       {deletingDay && (
-        <AdminDeleteModal id={deletingDay.id} title={deletingDay.title} basePath={'/api/admin/days'} itemName={'Día'} onClose={() => setDeletingDay(null)} onDeleted={onDeleted} />
+        <AdminDeleteModal id={deletingDay.id} title={deletingDay.title} basePath={'/admin/days'} itemName={'Día'} onClose={() => setDeletingDay(null)} onDeleted={onDeleted} />
       )}
     </div>
   )

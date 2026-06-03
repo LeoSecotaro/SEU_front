@@ -16,7 +16,7 @@ export default function AdminLabels() {
   const fetchLabels = async () => {
     setLoading(true)
     try {
-      const data = await apiGet('/api/admin/labels', { includeCredentials: true })
+      const data = await apiGet('/admin/labels', { includeCredentials: true })
       const list = Array.isArray(data) ? data : (Array.isArray(data.data) ? data.data : Object.values(data).flat())
       setLabels(list.filter(Boolean))
     } catch (err) {
@@ -33,7 +33,7 @@ export default function AdminLabels() {
     const name = newName.trim()
     if (!name) return
     try {
-      await apiPost('/api/admin/labels', { label: { name } }, { includeCredentials: true })
+      await apiPost('/admin/labels', { label: { name } }, { includeCredentials: true })
       setNewName('')
       toast.success('Categoría creada')
       fetchLabels()
@@ -57,7 +57,7 @@ export default function AdminLabels() {
     const name = (editingName || '').trim()
     if (!name) return
     try {
-      await apiPut(`/api/admin/labels/${id}`, { label: { name } }, { includeCredentials: true })
+      await apiPut(`/admin/labels/${id}`, { label: { name } }, { includeCredentials: true })
       toast.success('Categoría actualizada')
       cancelEdit()
       fetchLabels()
@@ -119,7 +119,7 @@ export default function AdminLabels() {
       </div>
 
       {deletingLabel && (
-        <AdminDeleteModal id={deletingLabel.id} title={deletingLabel.title} basePath={'/api/admin/labels'} itemName={'Categoría'} onClose={() => setDeletingLabel(null)} onDeleted={onDeleted} />
+        <AdminDeleteModal id={deletingLabel.id} title={deletingLabel.title} basePath={'/admin/labels'} itemName={'Categoría'} onClose={() => setDeletingLabel(null)} onDeleted={onDeleted} />
       )}
     </div>
   )

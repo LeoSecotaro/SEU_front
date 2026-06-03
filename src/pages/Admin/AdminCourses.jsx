@@ -7,6 +7,7 @@ import AdminCourseEditModal from '../../components/AdminCourseEditModal/AdminCou
 import AdminCourseDeleteModal from '../../components/AdminCourseDeleteModal/AdminCourseDeleteModal'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
+import { apiGet } from '../../api/client'
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([])
@@ -18,11 +19,7 @@ export default function AdminCourses() {
   const fetchCourses = async () => {
     try {
       // Use proxied API endpoint only
-      const response = await fetch('/api/admin/courses', { credentials: 'include', headers: { 'Accept': 'application/json' } })
-      if (!response.ok) {
-        throw new Error('Error de red al intentar obtener los cursos')
-      }
-      const data = await response.json()
+      const data = await apiGet('/admin/courses')
 
       // Normalize backend shape to the UI shape
       const normalize = (c) => {

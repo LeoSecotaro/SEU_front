@@ -6,6 +6,7 @@ import AdminSidebar from '../../components/AdminSidebar/AdminSidebar'
 import './AdminLayout.css'
 import { toast } from 'react-toastify'
 import { signOut } from '../../api/session'
+import { apiRequest } from '../../api/client'
 
 export default function AdminLayout() {
   const navigate = useNavigate()
@@ -17,7 +18,7 @@ export default function AdminLayout() {
     const checkAdmin = async () => {
       try {
         // call a protected admin endpoint to verify session + admin flag
-        const res = await fetch('/api/admin/courses', { method: 'GET', credentials: 'include', headers: { 'Accept': 'application/json' } })
+        const res = await apiRequest('/admin/courses', { method: 'GET' })
         if (!mounted) return
         if (res.status === 401) {
           // not signed in

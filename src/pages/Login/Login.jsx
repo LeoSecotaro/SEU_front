@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiMail, FiLock, FiEye, FiEyeOff } from 'react-icons/fi'
 import './Login.css'
+import { signIn } from '../../api/session'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -13,31 +14,13 @@ export default function Login() {
 
   const toggleShowPassword = () => setShowPassword((v) => !v)
 
-  // Obtiene el token CSRF si está presente en la meta tag (Rails)
-  const getCsrfToken = () => {
-    if (typeof document === 'undefined') return null
-    const meta = document.querySelector('meta[name="csrf-token"]')
-    return meta ? meta.getAttribute('content') : null
-  }
-
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError(null)
     setLoading(true)
 
     try {
-      const csrfToken = getCsrfToken()
-    
-      const res = await fetch('/users/sign_in', {
-        method: 'POST',
-        credentials: 'include', // enviar cookies para que Rails cree la sesión
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-          ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {}),
-        },
-        body: JSON.stringify({ user: { email, password } }),
-      })
+      const res = await signIn(email, password)
 
       if (!res.ok) {
         // intentar leer mensaje de error del JSON, si existe

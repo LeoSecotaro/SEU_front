@@ -1,20 +1,20 @@
 import { apiGet, apiPost, apiPut, apiDelete, apiRequest } from './client'
 
 export async function listAdminCourses() {
-  return apiGet('/api/admin/courses')
+  return apiGet('/admin/courses')
 }
 
 export async function getAdminCourse(courseId) {
   if (!courseId) return Promise.reject(new Error('missing course id'))
-  return apiGet(`/api/admin/courses/${courseId}`)
+  return apiGet(`/admin/courses/${courseId}`)
 }
 
 export async function fetchAdminOptions() {
   // modes, days, labels
   const [modes, days, labels] = await Promise.all([
-    apiGet('/api/admin/modes'),
-    apiGet('/api/admin/days'),
-    apiGet('/api/admin/labels')
+    apiGet('/admin/modes'),
+    apiGet('/admin/days'),
+    apiGet('/admin/labels')
   ])
   return { modes, days, labels }
 }
@@ -99,13 +99,13 @@ async function postWithOptionalImage(path, payloadCourse, imageFile, method = 'P
 }
 
 export function createAdminCourse(payloadCourse, imageFile) {
-  return postWithOptionalImage('/api/admin/courses', payloadCourse, imageFile, 'POST')
+  return postWithOptionalImage('/admin/courses', payloadCourse, imageFile, 'POST')
 }
 
 export function updateAdminCourse(courseId, payloadCourse, imageFile) {
-  return postWithOptionalImage(`/api/admin/courses/${courseId}`, payloadCourse, imageFile, 'PATCH')
+  return postWithOptionalImage(`/admin/courses/${courseId}`, payloadCourse, imageFile, 'PATCH')
 }
 
 export function deleteAdminCourse(courseId) {
-  return apiDelete(`/api/admin/courses/${courseId}`)
+  return apiDelete(`/admin/courses/${courseId}`)
 }

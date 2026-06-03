@@ -1,25 +1,25 @@
 import { apiGet, apiPost, apiPut, apiDelete, apiRequest } from './client'
 
 export function listAdminUsers() {
-  return apiGet('/api/admin/users')
+  return apiGet('/admin/users')
 }
 
 export function getAdminUser(id) {
   if (!id) return Promise.reject(new Error('missing user id'))
-  return apiGet(`/api/admin/users/${id}`)
+  return apiGet(`/admin/users/${id}`)
 }
 
 export function createAdminUser(payload) {
   // payload: { email, password, password_confirmation, admin }
-  return apiPost('/api/admin/users', { user: payload })
+  return apiPost('/admin/users', { user: payload })
 }
 
 export function updateAdminUser(id, payload) {
-  return apiPut(`/api/admin/users/${id}`, { user: payload })
+  return apiPut(`/admin/users/${id}`, { user: payload })
 }
 
 export function deleteAdminUser(id) {
-  return apiDelete(`/api/admin/users/${id}`)
+  return apiDelete(`/admin/users/${id}`)
 }
 
 // Update the currently authenticated user's password/profile via canonical endpoint

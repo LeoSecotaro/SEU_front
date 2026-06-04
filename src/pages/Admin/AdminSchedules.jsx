@@ -4,6 +4,7 @@ import './AdminSchedules.css'
 import { toast } from 'react-toastify'
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
 import { apiGet, apiPost, apiPut, apiDelete } from '../../api/client'
+import SkeletonRow from '../../components/Skeletons/SkeletonRow'
 
 export default function AdminSchedules() {
   const [days, setDays] = useState([])
@@ -85,7 +86,11 @@ export default function AdminSchedules() {
       </div>
 
       <div className="labels-list">
-        {loading ? <p>Cargando...</p> : (
+        {loading ? (
+          <>
+            {Array(4).fill(0).map((_, i) => <SkeletonRow key={i} className="label-row" textWidth="30%" />)}
+          </>
+        ) : (
           days.length === 0 ? <p className="muted">No hay días aún.</p> : (
             days.map(day => (
               <div key={day.id} className="label-row">

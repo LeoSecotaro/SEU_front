@@ -7,6 +7,7 @@ import CourseHero from '../components/CourseDetails/CourseHero'
 import CourseSidebar from '../components/CourseDetails/CourseSidebar'
 import CourseContent from '../components/CourseDetails/CourseContent'
 import Chatbot from '../components/Chatbot/Chatbot'
+import CourseDetailsSkeleton from '../components/Skeletons/CourseDetailsSkeleton'
 
 export default function CourseDetails() {
   const { id } = useParams()
@@ -19,7 +20,7 @@ export default function CourseDetails() {
   }, [id])
 
   if (error) return <div className="container">Error cargando curso: {String(error)}</div>
-  if (!course) return <div className="container">Cargando...</div>
+  if (!course) return <CourseDetailsSkeleton />
 
   return (
     <div className="course-page container">

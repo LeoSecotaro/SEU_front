@@ -7,6 +7,7 @@ import AdminUserEditModal from '../../components/AdminUserEditModal/AdminUserEdi
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
 import { listAdminUsers } from '../../api/users'
 import { useAuth } from '../../context/AuthContext'
+import SkeletonRow from '../../components/Skeletons/SkeletonRow'
 
 export default function AdminUsers() {
   const { currentUser } = useAuth()
@@ -50,7 +51,11 @@ export default function AdminUsers() {
         <button className="btn-primary" onClick={() => setCreateModalOpen(true)}><FiPlus /> Nuevo Usuario</button>
       </div>
 
-      {loading ? <p>Cargando usuarios...</p> : (
+      {loading ? (
+        <div className="users-list">
+          {Array(4).fill(0).map((_, i) => <SkeletonRow key={i} className="user-row" />)}
+        </div>
+      ) : (
         <div className="users-list">
           {users.map(u => (
             <div key={u.id} className="user-row">

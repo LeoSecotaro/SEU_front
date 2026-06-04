@@ -4,6 +4,7 @@ import './AdminLabels.css'
 import { toast } from 'react-toastify'
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
 import { apiGet, apiPost, apiPut } from '../../api/client'
+import SkeletonRow from '../../components/Skeletons/SkeletonRow'
 
 export default function AdminLabels() {
   const [labels, setLabels] = useState([])
@@ -86,7 +87,11 @@ export default function AdminLabels() {
       </div>
 
       <div className="labels-list">
-        {loading ? <p>Cargando...</p> : (
+        {loading ? (
+          <>
+            {Array(4).fill(0).map((_, i) => <SkeletonRow key={i} className="label-row" textWidth="30%" />)}
+          </>
+        ) : (
           labels.length === 0 ? <p className="muted">No hay categorías aún.</p> : (
             labels.map(label => (
               <div key={label.id} className="label-row">

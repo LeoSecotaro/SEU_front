@@ -3,6 +3,7 @@ import './courses.css'
 import { FaLayerGroup } from 'react-icons/fa'
 import CourseCard from '../CourseCard/CourseCard'
 import { listCourses, listLabels } from '../../api/courses'
+import CourseCardSkeleton from '../Skeletons/CourseCardSkeleton'
 
 export default function CoursesList() {
   const [courses, setCourses] = useState([])
@@ -41,7 +42,6 @@ export default function CoursesList() {
     setSelectedLabel(labelId)
   }
 
-  if (loading) return <div className="courses-grid">Cargando...</div>
   if (error) return <div className="courses-grid">Error al cargar cursos</div>
 
   return (
@@ -83,10 +83,15 @@ export default function CoursesList() {
         </header>
 
         <div className="courses-grid">
-          {courses.length === 0 && <div>No hay cursos</div>}
-          {courses.map((c) => (
-            <CourseCard key={c.id} course={c} />
-          ))}
+          {loading ? (
+            Array(6).fill(0).map((_, i) => <CourseCardSkeleton key={i} />)
+          ) : courses.length === 0 ? (
+            <div>No hay cursos</div>
+          ) : (
+            courses.map((c) => (
+              <CourseCard key={c.id} course={c} />
+            ))
+          )}
         </div>
       </div>
     </section>

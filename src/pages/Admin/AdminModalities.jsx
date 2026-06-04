@@ -4,6 +4,7 @@ import './AdminModalities.css'
 import { toast } from 'react-toastify'
 import AdminDeleteModal from '../../components/AdminDeleteModal/AdminDeleteModal'
 import { apiGet, apiPost, apiPut } from '../../api/client'
+import SkeletonRow from '../../components/Skeletons/SkeletonRow'
 
 export default function AdminModalities() {
   const [modes, setModes] = useState([])
@@ -85,7 +86,11 @@ export default function AdminModalities() {
       </div>
 
       <div className="labels-list">
-        {loading ? <p>Cargando...</p> : (
+        {loading ? (
+          <>
+            {Array(4).fill(0).map((_, i) => <SkeletonRow key={i} className="label-row" textWidth="30%" />)}
+          </>
+        ) : (
           modes.length === 0 ? <p className="muted">No hay modalidades aún.</p> : (
             modes.map(mode => (
               <div key={mode.id} className="label-row">

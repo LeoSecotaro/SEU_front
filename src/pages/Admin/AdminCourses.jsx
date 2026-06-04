@@ -8,6 +8,7 @@ import AdminCourseDeleteModal from '../../components/AdminCourseDeleteModal/Admi
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { apiGet } from '../../api/client'
+import SkeletonCard from '../../components/Skeletons/SkeletonCard'
 
 export default function AdminCourses() {
   const [courses, setCourses] = useState([])
@@ -143,7 +144,9 @@ export default function AdminCourses() {
       </div>
 
       {loading ? (
-        <p>Cargando cursos...</p>
+        <div className="courses-list">
+          {Array(4).fill(0).map((_, i) => <SkeletonCard key={i} />)}
+        </div>
       ) : (
         <div className="courses-list">
           {courses.map(course => (

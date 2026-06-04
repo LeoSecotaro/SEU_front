@@ -236,12 +236,16 @@
 @media (max-width: 480px) {
   .chatbot-window {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+    overscroll-behavior: none;
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 100dvh;
-    max-height: 100dvh;
     border-radius: 0;
   }
   

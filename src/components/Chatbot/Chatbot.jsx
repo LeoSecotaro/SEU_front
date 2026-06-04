@@ -27,6 +27,16 @@ export default function Chatbot({ courseId }) {
     scrollToBottom();
   }, [messages]);
 
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => {
+        document.body.style.overflow = originalOverflow;
+      };
+    }
+  }, [isOpen]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -86,6 +96,13 @@ export default function Chatbot({ courseId }) {
 
   const cancelDelete = () => setShowConfirm(false);
 
+  const handleInputFocus = () => {
+    setTimeout(() => {
+      scrollToBottom();
+    }, 180);
+  };
+
+
   return (
     <div className="chatbot-container">
       <button className="chatbot-toggle" onClick={() => setIsOpen(!isOpen)}>
@@ -127,6 +144,7 @@ export default function Chatbot({ courseId }) {
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+            onFocus={handleInputFocus}
             placeholder="Escribe un mensaje..."
             disabled={isLoading}
           />

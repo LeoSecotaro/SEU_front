@@ -96,9 +96,14 @@ export default function Chatbot({ courseId }) {
       <div className={`chatbot-window ${isOpen ? 'open' : 'closed'}`}>
         <div className="chatbot-header">
           <h3>Asistente del Curso</h3>
-          <button className="chatbot-delete" onClick={handleDeleteSession} title="Reiniciar sesión del asistente">
-            <FaTrash />
-          </button>
+          <div className="chatbot-header-actions">
+            <button className="chatbot-delete" onClick={handleDeleteSession} title="Reiniciar sesión del asistente">
+              <FaTrash />
+            </button>
+            <button className="chatbot-close" onClick={() => setIsOpen(false)} title="Cerrar chat">
+              <FaTimes />
+            </button>
+          </div>
         </div>
         
         <div className="chatbot-messages">

@@ -13,6 +13,9 @@ export default function Chatbot({ courseId }) {
   const messagesEndRef = useRef(null);
   const [summaryGenerated, setSummaryGenerated] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [viewportHeight, setViewportHeight] = useState(window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
+
   
   useEffect(() => {
     if (isOpen) {
@@ -36,6 +39,40 @@ export default function Chatbot({ courseId }) {
       };
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 480);
+      if (window.visualViewport) {
+        setViewportHeight(window.visualViewport.height);
+      } else {
+        setViewportHeight(window.innerHeight);
+      }
+    };
+
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', handleResize);
+    } else {
+      window.addEventListener('resize', handleResize);
+    }
+
+    handleResize();
+
+    return () => {
+      if (window.visualViewport) {
+        window.visualViewport.removeEventListener('resize', handleResize);
+      } else {
+        window.removeEventListener('resize', handleResize);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [viewportHeight, isOpen]);
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -110,7 +147,10 @@ export default function Chatbot({ courseId }) {
         {!isOpen && hasUnread && <span className="chatbot-badge">1</span>}
       </button>
 
-      <div className={`chatbot-window ${isOpen ? 'open' : 'closed'}`}>
+      <div
+        className={`chatbot-window ${isOpen ? 'open' : 'closed'}`}
+        style={isMobile ? { height: `${viewportHeight}px` } : {}}
+      >
         <div className="chatbot-header">
           <h3>Asistente del Curso</h3>
           <div className="chatbot-header-actions">

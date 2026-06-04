@@ -14,6 +14,7 @@ export default function Chatbot({ courseId }) {
   const [summaryGenerated, setSummaryGenerated] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [viewportHeight, setViewportHeight] = useState(window.visualViewport ? window.visualViewport.height : window.innerHeight);
+  const [viewportTop, setViewportTop] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 480);
 
   
@@ -41,28 +42,32 @@ export default function Chatbot({ courseId }) {
   }, [isOpen]);
 
   useEffect(() => {
-    const handleResize = () => {
+    const handleViewportChange = () => {
       setIsMobile(window.innerWidth <= 480);
       if (window.visualViewport) {
         setViewportHeight(window.visualViewport.height);
+        setViewportTop(window.visualViewport.offsetTop);
       } else {
         setViewportHeight(window.innerHeight);
+        setViewportTop(0);
       }
     };
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener('resize', handleResize);
+      window.visualViewport.addEventListener('resize', handleViewportChange);
+      window.visualViewport.addEventListener('scroll', handleViewportChange);
     } else {
-      window.addEventListener('resize', handleResize);
+      window.addEventListener('resize', handleViewportChange);
     }
 
-    handleResize();
+    handleViewportChange();
 
     return () => {
       if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleResize);
+        window.visualViewport.removeEventListener('resize', handleViewportChange);
+        window.visualViewport.removeEventListener('scroll', handleViewportChange);
       } else {
-        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('resize', handleViewportChange);
       }
     };
   }, []);
@@ -149,7 +154,7 @@ export default function Chatbot({ courseId }) {
 
       <div
         className={`chatbot-window ${isOpen ? 'open' : 'closed'}`}
-        style={isMobile ? { height: `${viewportHeight}px` } : {}}
+        style={isMobile ? { height: `${viewportHeight}px`, top: `${viewportTop}px`, bottom: 'auto' } : {}}
       >
         <div className="chatbot-header">
           <h3>Asistente del Curso</h3>

@@ -216,11 +216,18 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
   // helper to translate known backend validation messages to Spanish
   const translateBackendErrors = (errData) => {
     if (!errData) return 'Error desconocido';
+    
+    // Extract payload if the error is wrapped in a response error object
+    const data = errData.payload || errData;
+
     const mapMessage = (msg) => {
       if (!msg) return '';
       // exact or partial matches
       if (typeof msg === 'string') {
         if (msg.match(/Course days start time/i)) return 'El horario del día requiere hora de inicio.';
+        if (msg.match(/Course days end time must be after/i) || msg.match(/must be after start_time/i)) {
+          return 'La hora de fin debe ser posterior a la de inicio.';
+        }
         if (msg.match(/Course days end time/i)) return 'El horario del día requiere hora de fin.';
         // generic blank messages
         if (msg.match(/can't be blank/i)) return msg.replace(/can't be blank/i, 'no puede estar vacío');
@@ -229,23 +236,23 @@ export default function AdminCourseModal({ onClose, onCourseCreated }) {
       return String(msg);
     };
 
-    if (errData.errors) {
-      if (Array.isArray(errData.errors)) {
-        return errData.errors.map(mapMessage).filter(Boolean).join('; ');
+    if (data.errors) {
+      if (Array.isArray(data.errors)) {
+        return data.errors.map(mapMessage).filter(Boolean).join('; ');
       }
-      if (typeof errData.errors === 'object') {
-        return Object.entries(errData.errors)
+      if (typeof data.errors === 'object') {
+        return Object.entries(data.errors)
           .map(([field, messages]) => {
             const msgs = Array.isArray(messages) ? messages : [messages];
             return `${field}: ${msgs.map(mapMessage).join(', ')}`;
           })
           .join('; ');
       }
-      return mapMessage(errData.errors);
+      return mapMessage(data.errors);
     }
 
     // fallback
-    if (errData.error) return mapMessage(errData.error);
+    if (data.error) return mapMessage(data.error);
     return JSON.stringify(errData);
   };
 

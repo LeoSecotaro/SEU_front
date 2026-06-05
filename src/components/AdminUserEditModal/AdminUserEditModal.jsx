@@ -6,6 +6,7 @@ import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
 import { formatApiError } from '../../utils/errors'
+import { apiRequest } from '../../api/client'
 
 export default function AdminUserEditModal({ userId, onClose, onUpdated, currentUserIdProp, currentUserEmailProp, showPasswordFields }) {
   const [email, setEmail] = useState('')
@@ -33,9 +34,8 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
 
     // only check canonical route if needed
     const tryFetchCurrent = async () => {
-      const ep = '/api/v1/current_user'
       try {
-        const res = await fetch(ep, { credentials: 'include', headers: { Accept: 'application/json' } })
+        const res = await apiRequest('/api/v1/current_user')
         if (!res || !res.ok) return
         const body = await res.json()
         let id = null
@@ -214,7 +214,9 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
           )}
 
           {!isOwnAccount && (
-            <div className="muted" style={{marginTop:12}}>No puede cambiar la contraseña de otros usuarios desde aquí.</div>
+            <div style={{ marginTop: 12, color: '#6b7280', fontSize: '14px' }}>
+              No puede cambiar la contraseña de otros usuarios desde aquí.
+            </div>
           )}
         </>
       )}

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
+import { apiRequest } from '../api/client'
 
 const AuthContext = createContext(null)
 
@@ -9,10 +10,8 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     let mounted = true
     const tryFetchCurrent = async () => {
-      // Only call the canonical backend route — do not try multiple fallback endpoints.
-      const ep = '/api/v1/current_user'
       try {
-        const res = await fetch(ep, { credentials: 'include', headers: { 'Accept': 'application/json' } })
+        const res = await apiRequest('/api/v1/current_user')
         if (!res || !res.ok) {
           if (mounted) setLoading(false)
           return

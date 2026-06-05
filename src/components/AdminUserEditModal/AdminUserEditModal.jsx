@@ -5,6 +5,7 @@ import Modal from '../Modal/Modal'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { useAuth } from '../../context/AuthContext'
 import { toast } from 'react-toastify'
+import { formatApiError } from '../../utils/errors'
 
 export default function AdminUserEditModal({ userId, onClose, onUpdated, currentUserIdProp, currentUserEmailProp, showPasswordFields }) {
   const [email, setEmail] = useState('')
@@ -130,7 +131,7 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
       onUpdated && onUpdated()
     } catch (err) {
       console.error('update user error', err)
-      const msg = err && err.payload ? (err.payload.error || err.payload.message || JSON.stringify(err.payload)) : 'Error actualizando usuario'
+      const msg = formatApiError(err, 'Error actualizando usuario')
       toast.error(msg)
     } finally {
       setLoading(false)

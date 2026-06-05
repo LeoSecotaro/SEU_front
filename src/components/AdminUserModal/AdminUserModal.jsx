@@ -4,6 +4,7 @@ import Modal from '../Modal/Modal'
 import { createAdminUser } from '../../api/users'
 import { FiEye, FiEyeOff } from 'react-icons/fi'
 import { toast } from 'react-toastify'
+import { formatApiError } from '../../utils/errors'
 
 export default function AdminUserModal({ onClose, onCreated }) {
   const [email, setEmail] = useState('')
@@ -28,7 +29,7 @@ export default function AdminUserModal({ onClose, onCreated }) {
       onCreated && onCreated()
     } catch (err) {
       console.error('create user error', err)
-      const msg = err && err.payload ? (err.payload.error || err.payload.message || JSON.stringify(err.payload)) : 'Error creando usuario'
+      const msg = formatApiError(err, 'Error creando usuario')
       toast.error(msg)
     } finally {
       setLoading(false)

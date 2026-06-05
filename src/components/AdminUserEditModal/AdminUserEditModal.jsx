@@ -16,6 +16,7 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
   const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false)
   const [currentUserId, setCurrentUserId] = useState(null)
   const [currentUserEmail, setCurrentUserEmail] = useState(null)
+  const [errorMsg, setErrorMsg] = useState('')
 
   useEffect(() => {
     // if parent passed current user info, use it immediately to avoid timing issues
@@ -74,14 +75,15 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
   }, [currentUserIdProp, currentUserEmailProp])
 
   const handleUpdate = async () => {
+    if ((password || passwordConfirmation) && password !== passwordConfirmation) {
+      setErrorMsg('Las contraseñas no coinciden')
+      toast.error('Las contraseñas no coinciden')
+      return
+    }
+
+    setErrorMsg('')
     setLoading(true)
     try {
-      // If password was provided, ensure confirmation matches; otherwise omit password fields to avoid sending empty strings
-      if (password && password.length > 0 && password !== passwordConfirmation) {
-        toast.error('La confirmación de contraseña no coincide')
-        setLoading(false)
-        return
-      }
 
       // Determine ownership
       const authUserId = auth && auth.currentUser && auth.currentUser.id ? String(auth.currentUser.id) : null
@@ -135,6 +137,7 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
       setCurrentPassword('')
       setPassword('')
       setPasswordConfirmation('')
+      setErrorMsg('')
     }
   }
 
@@ -163,7 +166,15 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
               <div className="field">
                 <label>Nueva Contraseña (dejar en blanco para no cambiar)</label>
                 <div className="input-with-toggle">
-                  <input type={showPassword ? 'text' : 'password'} value={password} onChange={e => setPassword(e.target.value)} />
+                  <input 
+                    type={showPassword ? 'text' : 'password'} 
+                    value={password} 
+                    onChange={e => {
+                      setPassword(e.target.value)
+                      if (errorMsg) setErrorMsg('')
+                    }} 
+                    className={errorMsg ? 'input-error' : ''}
+                  />
                   <button type="button" className="pwd-toggle" aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'} onClick={() => setShowPassword(s => !s)}>
                     {showPassword ? <FiEyeOff /> : <FiEye />}
                   </button>
@@ -173,11 +184,20 @@ export default function AdminUserEditModal({ userId, onClose, onUpdated, current
               <div className="field">
                 <label>Confirmar Contraseña</label>
                 <div className="input-with-toggle">
-                  <input type={showPasswordConfirmation ? 'text' : 'password'} value={passwordConfirmation} onChange={e => setPasswordConfirmation(e.target.value)} />
+                  <input 
+                    type={showPasswordConfirmation ? 'text' : 'password'} 
+                    value={passwordConfirmation} 
+                    onChange={e => {
+                      setPasswordConfirmation(e.target.value)
+                      if (errorMsg) setErrorMsg('')
+                    }} 
+                    className={errorMsg ? 'input-error' : ''}
+                  />
                   <button type="button" className="pwd-toggle" aria-label={showPasswordConfirmation ? 'Ocultar contraseña' : 'Mostrar contraseña'} onClick={() => setShowPasswordConfirmation(s => !s)}>
                     {showPasswordConfirmation ? <FiEyeOff /> : <FiEye />}
                   </button>
                 </div>
+                {errorMsg && <span className="error-message">{errorMsg}</span>}
               </div>
 
               <div className="field">

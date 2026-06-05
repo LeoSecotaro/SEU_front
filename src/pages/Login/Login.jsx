@@ -30,7 +30,13 @@ export default function Login() {
         } catch (err) {
           // noop
         }
-        const msg = (data && (data.error || data.message || data.errors)) || `Error ${res.status}`
+        let msg = (data && (data.error || data.message || data.errors)) || `Error ${res.status}`
+        if (typeof msg === 'string') {
+          const normalized = msg.trim().toLowerCase();
+          if (normalized === 'invalid email or password.' || normalized === 'invalid email or password') {
+            msg = 'Correo electrónico o contraseña incorrectos.'
+          }
+        }
         setError(typeof msg === 'string' ? msg : JSON.stringify(msg))
         setLoading(false)
         return

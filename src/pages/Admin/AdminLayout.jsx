@@ -4,6 +4,7 @@ import { FaGraduationCap } from 'react-icons/fa'
 import { FiMenu } from 'react-icons/fi'
 import AdminSidebar from '../../components/AdminSidebar/AdminSidebar'
 import './AdminLayout.css'
+import '../../components/Skeletons/skeleton.css'
 import { toast } from 'react-toastify'
 import { signOut } from '../../api/session'
 import { apiRequest } from '../../api/client'
@@ -71,10 +72,6 @@ export default function AdminLayout() {
     }
   }
 
-  if (loadingAuth) return (
-    <div className="admin-layout"><div style={{padding:40}}>Verificando permisos...</div></div>
-  )
-
   return (
     <div className="admin-layout">
       <AdminSidebar onLogout={handleLogout} mobileOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
@@ -97,7 +94,30 @@ export default function AdminLayout() {
         </header>
 
         <main className="admin-main">
-          <Outlet />
+          {loadingAuth ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              {/* Header skeleton */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
+                <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+                  <div className="skeleton-box" style={{ width: '40px', height: '40px', borderRadius: '8px' }}></div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', width: '200px' }}>
+                    <div className="skeleton-box" style={{ width: '60%', height: '24px' }}></div>
+                    <div className="skeleton-box" style={{ width: '100%', height: '14px' }}></div>
+                  </div>
+                </div>
+                <div className="skeleton-box" style={{ width: '130px', height: '38px', borderRadius: '8px' }}></div>
+              </div>
+
+              {/* List / Cards skeleton */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {Array(3).fill(0).map((_, i) => (
+                  <div key={i} className="skeleton-box" style={{ width: '100%', height: '160px', borderRadius: '12px' }}></div>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
     </div>

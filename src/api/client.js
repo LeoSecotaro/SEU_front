@@ -6,13 +6,6 @@ export async function apiRequest(path, options = {}) {
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   const url = `${cleanBaseUrl}${normalizedPath}`;
 
-  // TRAMPA: Imprimimos las variables exactas en la consola
-  console.log("DETECTIVE DE RUTAS:");
-  console.log("VITE_API_BASE:", import.meta.env.VITE_API_BASE);
-  console.log(" cleanBaseUrl:", cleanBaseUrl);
-  console.log("path que recibe la función:", path);
-  console.log("URL final armada:", url);
-
   const csrf = (typeof document !== 'undefined' && document.querySelector('meta[name="csrf-token"]'))
     ? document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     : null;
